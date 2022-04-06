@@ -15,9 +15,21 @@
                {{ form_row(formView.name) }}
                {{ form_row(formView.email) }}
                {{form_row(formView.adminLinkToken)}}
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Créer l'événement</button>
          </div>
       </div>
-    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Créer l'événement</button>
+
+        <div class="row">
+            {% if events|length > 0 %}
+            <ul>
+                {% for event in events %}
+                    <li><a href="{{ path('groups', {'adminToken': event.adminLinkToken}) }}">{{ event.name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+         </div>
+    
    </div>
     {{ form_end(formView) }}
 {% endblock %}

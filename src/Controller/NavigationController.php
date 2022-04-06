@@ -19,7 +19,7 @@ class NavigationController extends AbstractController
 {
     //page A
     #[Route('/', name: 'homepage')]
-    public function homepage(EntityManagerInterface $em,Request $request): Response
+    public function homepage(EntityManagerInterface $em,Request $request, EventRepository $eventRepository): Response
     {
         $event = new Event();
     
@@ -40,8 +40,11 @@ class NavigationController extends AbstractController
 
         $formView = $form->createView();
 
+        $events = $eventRepository->findAll();
+
         return $this->render('navigation/homepage.html.twig', [
-            'formView' => $formView
+            'formView' => $formView,
+            'events' => $events
         ]);
     }
 
@@ -49,8 +52,6 @@ class NavigationController extends AbstractController
     #[Route('/event/{adminToken}/groups', name: 'groups')]
     public function groupsPage(EntityManagerInterface $em ,Request $request, EventRepository $eventRepository, GroupRepository $groupRepository, $adminToken): Response
     {
-       
-
         //créer un nouveau groupe
         $group = new Group();
     
@@ -61,7 +62,7 @@ class NavigationController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             //on set le token de l'événement au groupe
             $group->setLinkToken($adminToken);
-            $group->setLastArchived(new DateTime('2011-01-01T15:03:01.012345Z'));
+            $group->setLastArchived(new DateTime());
 
             $em->persist($group);
 
