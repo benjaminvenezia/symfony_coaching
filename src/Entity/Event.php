@@ -22,6 +22,9 @@ class Event
     #[ORM\Column(type: 'string', length: 255)]
     private $email;
 
+    // #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'link_token')]
+    // private $group_event;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,4 +65,16 @@ class Event
 
         return $this;
     }
+
+    // public function getGroupEvent(): ?Group
+    // {
+    //     return $this->group_event;
+    // }
+
+    // public function setGroupEvent(?Group $group_event): self
+    // {
+    //     $this->group_event = $group_event;
+
+    //     return $this;
+    // }
 }

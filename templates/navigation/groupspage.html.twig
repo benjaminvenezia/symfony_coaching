@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Liste des 
+{% endblock %}
+{% block body %}
+    {% if event %}
+        <h1>{{ event.name }}</h1>
+    {% endif %}
+
+        
+
+    {{ form_start(formView) }}
+
+    {{ form_errors(formView) }}
+
+   <div class="container">
+      <div class="row">
+      <h2>Ajouter un groupe</h2>
+         <div class="col">
+               {{ form_row(formView.name) }}
+         </div>
+      </div>
+      <div class="row">
+         <div class="col">
+            {% if groups|length > 0 %}
+            <ul>
+                {% for group in groups %}
+                    <li>{{ group.name }} {{ group.lastArchived|date("m/d/Y") }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+         </div>
+      </div>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Ajouter un groupe</button>
+   </div>
+    {{ form_end(formView) }}
+{% endblock %}
