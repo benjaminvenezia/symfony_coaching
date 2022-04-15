@@ -48,8 +48,8 @@
                 {% for group in groups %}
                     <tr>
                         <td>{{ group.name }}</td>
-                        <td>{{ group.lastArchived|date("m/d/Y") }} </td>
-                        <td>{{ group.lastArchived|date("m/d/Y") }} </td>
+                        <td>{{ group.lastArchived|date("d/m/Y") }} </td>
+                        <td>{{ group.lastArchived|date("d/m/Y") }} </td>
                         <td><a href="{{ path('group_delete', {id: group.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
                         <td><button class="btn btn-success">Page du groupe</button></td>
                         <td><button class="btn btn-success">Tickets</button></td>
