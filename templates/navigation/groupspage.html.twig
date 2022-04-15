@@ -1,0 +1,65 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Liste des 
+{% endblock %}
+{% block body %}
+    {% if event %}
+        <h1 class="mt-5 mb-5">Evénement : "{{ event.name }}"</h1>
+    {% endif %}
+
+        
+   <div class="container">
+      <div class="row">
+
+         <div class="col-5 card">
+            <div class="card-header">
+              <p>Ajouter un groupe</p>
+            </div>
+            <div class="card-body">
+               {{ form_start(formView) }}
+               {{ form_row(formView.name) }}
+               {{ form_errors(formView) }}
+               <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Ajouter un groupe</button>
+            </div>
+         </div>
+
+       </div>
+        <div class="row">
+        <div class="col">
+        <h2 class="mt-5 mb-5">Les groupes présents</h2>
+
+            {% if groups|length > 0 %}
+
+            <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Nom du groupe</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Retirer le groupe</th>
+                    <th scope="col">Page du groupe</th>
+                    <th scope="col">Voir tickets</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in groups %}
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        <td>{{ group.lastArchived|date("m/d/Y") }} </td>
+                        <td><a href="{{ path('group_delete', {id: group.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                        <td><button class="btn btn-success">Page du groupe</button></td>
+                        <td><button class="btn btn-success">Tickets</button></td>
+                    </tr>
+                {% endfor %}
+             </tbody>
+            </table>
+            {% else %}
+                <p>Aucun groupe n'est actuellement inscrit à l'événement "{{ event.name }}"</p>
+            {% endif %}
+
+         </div>
+        </div>
+      </div>
+   </div>
+    {{ form_end(formView) }}
+{% endblock %}
