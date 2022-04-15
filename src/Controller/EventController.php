@@ -52,14 +52,14 @@ class EventController extends AbstractController
         }
 
         $formView = $form->createView();
-
+        //return event
         $event = $this->eventRepository->findOneBy([
             'adminLinkToken' => $adminToken
         ]);
-
+        //returns groups
         $groups = $this->groupRepository->findBy([
-            'linkToken' => $adminToken //link token is the same than adminToken in this implementation...
-        ]);
+            'linkToken' => $adminToken, //link token is the same than adminToken in this implementation... 
+        ], ['last_helped' => 'ASC']);
         
         return $this->render('navigation/groupspage.html.twig', [
             'formView' => $formView, 
