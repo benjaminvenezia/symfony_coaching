@@ -27,7 +27,7 @@ class EventController extends AbstractController
         $this->eventRepository = $eventRepository;
     }
 
-    #[Route('/event/{adminToken}/groups', name: 'groups_show')]
+    #[Route('/event/{adminToken}/groups', name: 'event_show')]
     public function show(Request $request, $adminToken): Response
     {
         //créer un nouveau groupe
@@ -46,7 +46,7 @@ class EventController extends AbstractController
 
             $this->em->flush();
 
-            return $this->redirectToRoute('groups_show', [
+            return $this->redirectToRoute('event_show', [
                 "adminToken" => $adminToken,
             ]);
         }
