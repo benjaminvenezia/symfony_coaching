@@ -49,46 +49,7 @@ class NavigationController extends AbstractController
     }
 
     //page B
-    #[Route('/event/{adminToken}/groups', name: 'groups')]
-    public function groupsPage(EntityManagerInterface $em ,Request $request, EventRepository $eventRepository, GroupRepository $groupRepository, $adminToken): Response
-    {
-        //créer un nouveau groupe
-        $group = new Group();
     
-        $form = $this->createForm(CreateGroupType::class, $group);
-    
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            //on set le token de l'événement au groupe
-            $group->setLinkToken($adminToken);
-            $group->setLastArchived(new DateTime());
-
-            $em->persist($group);
-
-            $em->flush();
-
-            return $this->redirectToRoute('groups', [
-                "adminToken" => $adminToken,
-            ]);
-        }
-
-        $formView = $form->createView();
-
-        $event = $eventRepository->findOneBy([
-            'adminLinkToken' => $adminToken
-        ]);
-
-        $groups = $groupRepository->findBy([
-            'linkToken' => $adminToken
-        ]);
-        
-        return $this->render('navigation/groupspage.html.twig', [
-            'formView' => $formView, 
-            'groups' => $groups,
-            'event' => $event
-        ]);
-    }
 
 
 }
