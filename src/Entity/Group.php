@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\GroupRepository;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -146,11 +147,12 @@ class Group
     public function setHelpedCounter(int $helped_counter): self
     {
         $this->helped_counter = $helped_counter;
-
+      
         return $this;
     }
 
     public function incrementHelpedCounter() : void {
+        $this->last_helped = new DateTime('now');
         $this->helped_counter++;
     }
 
