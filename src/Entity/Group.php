@@ -39,6 +39,7 @@ class Group
     {
         $this->link_token = new ArrayCollection();
         $this->tickets = new ArrayCollection();
+        $this->helped_counter = 0;
     }
 
     public function getId(): ?int
@@ -138,11 +139,15 @@ class Group
     {
         return $this->helped_counter;
     }
-
+    
     public function setHelpedCounter(int $helped_counter): self
     {
         $this->helped_counter = $helped_counter;
 
         return $this;
+    }
+
+    public function incrementHelpedCounter() : void {
+        $this->helped_counter++;
     }
 }

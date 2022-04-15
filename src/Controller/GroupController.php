@@ -42,4 +42,21 @@ class GroupController extends AbstractController
 
         return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
+
+    #[Route('/group/help/{id}', name: 'group_help')]
+    public function help($id): Response
+    {
+        $group = $this->groupRepository->find($id);
+        $adminToken = $group->getLinkToken();
+
+        if(!$group) {
+            throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
+        }
+        
+        $group->incrementHelpedCounter();
+        $this->em->persist($group);
+        $this->em->flush();
+
+        return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
+    }
 }
