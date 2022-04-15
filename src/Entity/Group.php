@@ -29,9 +29,13 @@ class Group
     #[ORM\OneToMany(mappedBy: 'group_event', targetEntity: Event::class)]
     private $link_token;
 
+    #[ORM\OneToMany(mappedBy: 'linkToken', targetEntity: Ticket::class)]
+    private $tickets;
+
     public function __construct()
     {
         $this->link_token = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,6 +96,36 @@ class Group
             // if ($linkToken->getGroupEvent() === $this) {
             //     $linkToken->setGroupEvent(null);
             // }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets[] = $ticket;
+            $ticket->setLinkToken($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getLinkToken() === $this) {
+                $ticket->setLinkToken(null);
+            }
         }
 
         return $this;

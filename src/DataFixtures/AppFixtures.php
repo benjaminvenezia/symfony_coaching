@@ -12,7 +12,7 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-         define("NB_EVENTS", 5);
+        define("NB_EVENTS", 5);
 
         $namesEvent = array('Session crossfit', 'Session course à pieds', 'Entraînement senior', 'Remise en forme post-partum', 'session cap', 'initiation musculation', 'entraînement tennis junior', 'session pétanque', 'tournoi ping-pong cycle des Bromont');
 
@@ -25,7 +25,7 @@ class AppFixtures extends Fixture
             $manager->persist($event);
         }
 
-        $namesGroup = array('Michel', 'Anne', 'Jean', 'Thierry', 'Momo', 'Benjamin', 'Marguerite', 'Armand', 'Shelton', 'Bakou','Jojo', 'Dylan', 'Dayana');
+        $namesGroup = array('Michel', 'Anne', 'Pierre-Noël', 'Jean', 'Thierry', 'Momo', 'Guilibert','Edmond', 'Benjamin', 'Marguerite', 'Armand', 'Shelton', 'Bakou','Jojo', 'Dylan', 'Dayana', 'Aimé', 'Noel', 'Philippe', 'Philou', 'Florentin', 'Malia', 'Sania', 'Anne-Marie');
 
         for ($i = 0; $i < 20; $i++) 
         {
@@ -42,5 +42,3 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 }
-
-//php bin/console doctrine:fixtures:load
