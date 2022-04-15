@@ -58,7 +58,7 @@ class EventController extends AbstractController
         ]);
 
         $groups = $this->groupRepository->findBy([
-            'linkToken' => $adminToken
+            'linkToken' => $adminToken //link token is the same than adminToken in this implementation...
         ]);
         
         return $this->render('navigation/groupspage.html.twig', [
