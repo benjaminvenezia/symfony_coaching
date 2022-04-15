@@ -35,6 +35,9 @@ class Group
     #[ORM\Column(type: 'integer')]
     private $helped_counter;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private $last_helped;
+
     public function __construct()
     {
         $this->link_token = new ArrayCollection();
@@ -149,5 +152,17 @@ class Group
 
     public function incrementHelpedCounter() : void {
         $this->helped_counter++;
+    }
+
+    public function getLastHelped(): ?\DateTimeInterface
+    {
+        return $this->last_helped;
+    }
+
+    public function setLastHelped(?\DateTimeInterface $last_helped): self
+    {
+        $this->last_helped = $last_helped;
+
+        return $this;
     }
 }
