@@ -32,7 +32,7 @@ class GroupController extends AbstractController
     {
         $group = $this->groupRepository->find($id);
         $adminToken = $group->getLinkToken();
-        // dd($adminToken);
+        
         if(!$group) {
             throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
         }

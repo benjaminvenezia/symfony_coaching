@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\Group;
 use App\Form\CreateEventType;
 use App\Form\CreateGroupType;
+use App\Form\TokenLoginType;
 use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
 use DateTime;
@@ -23,11 +24,12 @@ class NavigationController extends AbstractController
     {
         $event = new Event();
     
-        $form = $this->createForm(CreateEventType::class, $event);
+        $formCreateEvent = $this->createForm(CreateEventType::class, $event);
     
-        $form->handleRequest($request);
+        $formCreateEvent->handleRequest($request);
+       
 
-        if($form->isSubmitted() && $form->isValid()) {
+         if($formCreateEvent->isSubmitted() && $formCreateEvent->isValid()) {
             $em->persist($event);
             $em->flush();
             
@@ -36,9 +38,10 @@ class NavigationController extends AbstractController
             return $this->redirectToRoute('event_show', [
                 "adminToken" => $token,
             ]);
-        }
+        } 
+        
 
-        $formView = $form->createView();
+        $formView = $formCreateEvent->createView();
 
         $events = $eventRepository->findAll();
 
@@ -46,6 +49,36 @@ class NavigationController extends AbstractController
             'formView' => $formView,
             'events' => $events
         ]);
+    }
+
+    #[Route('/login', name: 'navigation_login')]
+    public function login(EntityManagerInterface $em,Request $request, EventRepository $eventRepository): Response
+    {
+        $formLogin = $this->createForm(TokenLoginType::class);
+
+        $formLogin->handleRequest($request);
+
+        if($formLogin->isSubmitted() && $formLogin->isValid()) {
+            $data = $formLogin->getData();
+            $tokenName = $data['adminLinkToken'];
+
+            $eventAssociated = $eventRepository->findOneBy(['adminLinkToken' => $tokenName]);
+
+            if(!$eventAssociated) {
+                throw $this->createNotFoundException("Aucun groupe avec cet identifiant.");
+            }
+
+            return $this->redirectToRoute('event_show', [
+                "adminToken" => $tokenName,
+            ]);            
+        }
+
+        $formViewLogin = $formLogin->createView();
+
+        return $this->render('navigation/login.html.twig', [
+            'formViewLogin' => $formViewLogin,
+        ]);
+
     }
 
     //page B

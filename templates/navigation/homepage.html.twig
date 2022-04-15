@@ -8,7 +8,7 @@
 
    <div class="container">
       <div class="row">
-        <div class="col">
+        <div class="col-5 m-5">
                <h2>Créer votre événement</h2>
                {{ form_start(formView) }}
                {{ form_row(formView.name) }}
@@ -17,20 +17,20 @@
                {{ form_errors(formView) }}
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Créer l'événement</button>
         </div>
-        <div class="col">
-            <h2>Evenements à venir!</h2>
+        <div class="col m-5">
+            
+            <h2>Accéder à votre événement</h2>
 
-            {% if events|length > 0 %}
+            <a class="btn btn-primary btn-lg" href="{{path('navigation_login')}}">Accéder à mon groupe</a>
+            {# {% if events|length > 0 %}
                 <ul>
                     {% for event in events %}
                         <li><a href="{{ path('event_show', {'adminToken': event.adminLinkToken}) }}">{{ event.name }}</a></li>
                     {% endfor %}
                 </ul>
-            {% endif %}
+            {% endif %} #}
 
-            <a></a>
         </div>
-      </div>
       <div class="row mt-5">
        {% include "shared/_assurance.html.twig" with {
            "color" : "primary", 
@@ -49,6 +49,7 @@
            "icon" : "fas fa-lock", 
            "text" : "Nous sommes garants de la sécurité de vos données, aucune données sensible requise." 
         } %}
+    </div>
     </div>
    </div>
     {{ form_end(formView) }}

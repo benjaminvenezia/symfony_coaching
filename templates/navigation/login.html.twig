@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+
+{% endblock %}
+{% block body %}
+    <div class="container container__login">
+        <div class="row">
+            <div class="col-4 mx-auto">
+                {{ form_start(formViewLogin) }}
+                {{ form_row(formViewLogin.adminLinkToken)}}
+                {{ form_rest(formViewLogin) }}
+                {{ form_errors(formViewLogin) }}
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Rejoindre mon groupe</button>
+            </div> 
+        </div>
+    </div>
+{% endblock %}

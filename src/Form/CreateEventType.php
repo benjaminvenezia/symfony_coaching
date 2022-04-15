@@ -17,13 +17,17 @@ class CreateEventType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nom de l\'événement.',
                 'attr' => ['placeholder' => 'Nom de l\'événement.'],
-                'required' => true,
+                'required' => false,
             ])
-            ->add('adminLinkToken')
+            ->add('adminLinkToken', TextType::class, [
+                'label' => 'token.',
+                'attr' => ['placeholder' => 'Nom de l\'événement.'],
+                'required' => false,
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Précisez votre Email.',
                 'attr' => ['Précisez votre Email.'],
-                'required' => true,
+                'required' => false,
             ])
         ;
     }
