@@ -31,6 +31,25 @@
             <a></a>
         </div>
       </div>
+      <div class="row mt-5">
+       {% include "shared/_assurance.html.twig" with {
+           "color" : "primary", 
+           "icon" : "fas fa-truck", 
+           "text" : "Augmentez votre rentabilité en Coaching et managez vos groupes avec souplesse!" 
+        } %}
+
+        {% include "shared/_assurance.html.twig" with {
+           "color" : "success", 
+           "icon" : "fas fa-check", 
+           "text" : "Notre service est totalement gratuit, satisfait et nul besoin de remboursement donc." 
+        } %}
+
+        {% include "shared/_assurance.html.twig" with {
+           "color" : "warning", 
+           "icon" : "fas fa-lock", 
+           "text" : "Nous sommes garants de la sécurité de vos données, aucune données sensible requise." 
+        } %}
+    </div>
    </div>
     {{ form_end(formView) }}
 {% endblock %}
