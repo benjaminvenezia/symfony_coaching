@@ -68,7 +68,9 @@
              </tbody>
             </table>
             {% else %}
-                <p>Aucun groupe n'est actuellement inscrit à l'événement "{{ event.name }}"</p>
+                {% if event is not null %}
+                    <p>Aucun groupe n'est actuellement inscrit à l'événement "{{ event.name }}"</p>
+                {% endif %}
             {% endif %}
 
          </div>
