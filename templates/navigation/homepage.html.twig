@@ -23,7 +23,7 @@
             {% if events|length > 0 %}
                 <ul>
                     {% for event in events %}
-                        <li><a href="{{ path('groups_show', {'adminToken': event.adminLinkToken}) }}">{{ event.name }}</a></li>
+                        <li><a href="{{ path('event_show', {'adminToken': event.adminLinkToken}) }}">{{ event.name }}</a></li>
                     {% endfor %}
                 </ul>
             {% endif %}

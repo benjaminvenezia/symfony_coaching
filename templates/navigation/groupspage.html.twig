@@ -37,6 +37,7 @@
                     <th scope="col">Nom du groupe</th>
                     <th scope="col">Date</th>
                     <th scope="col">Retirer le groupe</th>
+                    <th scope="col">Page du groupe</th>
                     <th scope="col">Voir tickets</th>
                 </tr>
             </thead>
@@ -45,7 +46,8 @@
                     <tr>
                         <td>{{ group.name }}</td>
                         <td>{{ group.lastArchived|date("m/d/Y") }} </td>
-                        <td><a href="{{ path('groups_delete', {id: group.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                        <td><a href="{{ path('group_delete', {id: group.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                        <td><button class="btn btn-success">Page du groupe</button></td>
                         <td><button class="btn btn-success">Tickets</button></td>
                     </tr>
                 {% endfor %}

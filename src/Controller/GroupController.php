@@ -26,7 +26,8 @@ class GroupController extends AbstractController
         $this->eventRepository = $eventRepository;
     }
 
-    #[Route('/event/groups/delete/{id}', name: 'groups_delete')]
+    
+    #[Route('/group/delete/{id}', name: 'group_delete')]
     public function delete($id): Response
     {
         $group = $this->groupRepository->find($id);
@@ -39,47 +40,6 @@ class GroupController extends AbstractController
         $this->em->remove($group);
         $this->em->flush();
 
-        return $this->redirectToRoute('groups_show', ['adminToken' => $adminToken]);
-    }
-
-    #[Route('/event/{adminToken}/groups', name: 'groups_show')]
-    public function show(Request $request, $adminToken): Response
-    {
-        //créer un nouveau groupe
-        $group = new Group();
-    
-        $form = $this->createForm(CreateGroupType::class, $group);
-    
-        $form->handleRequest($request);
-
-        if($form->isSubmitted() && $form->isValid()) {
-            //on set le token de l'événement au groupe
-            $group->setLinkToken($adminToken);
-            $group->setLastArchived(new DateTime());
-
-            $this->em->persist($group);
-
-            $this->em->flush();
-
-            return $this->redirectToRoute('groups_show', [
-                "adminToken" => $adminToken,
-            ]);
-        }
-
-        $formView = $form->createView();
-
-        $event = $this->eventRepository->findOneBy([
-            'adminLinkToken' => $adminToken
-        ]);
-
-        $groups = $this->groupRepository->findBy([
-            'linkToken' => $adminToken
-        ]);
-        
-        return $this->render('navigation/groupspage.html.twig', [
-            'formView' => $formView, 
-            'groups' => $groups,
-            'event' => $event
-        ]);
+        return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
 }
