@@ -33,7 +33,7 @@ class NavigationController extends AbstractController
             
             $token = $event->getAdminLinkToken();
 
-            return $this->redirectToRoute('groups', [
+            return $this->redirectToRoute('groups_show', [
                 "adminToken" => $token,
             ]);
         }

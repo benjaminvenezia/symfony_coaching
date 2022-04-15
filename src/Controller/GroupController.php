@@ -61,7 +61,7 @@ class GroupController extends AbstractController
 
             $this->em->flush();
 
-            return $this->redirectToRoute('groups', [
+            return $this->redirectToRoute('groups_show', [
                 "adminToken" => $adminToken,
             ]);
         }

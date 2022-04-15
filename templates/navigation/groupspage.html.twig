@@ -5,21 +5,29 @@
 {% endblock %}
 {% block body %}
     {% if event %}
-        <h1>{{ event.name }}</h1>
+        <h1 class="mt-5 mb-5">Evénement : "{{ event.name }}"</h1>
     {% endif %}
 
         
    <div class="container">
       <div class="row">
-         <div class="col">
-                <h2>Ajouter un groupe</h2>
+
+         <div class="col-5 card">
+            <div class="card-header">
+              <p>Ajouter un groupe</p>
+            </div>
+            <div class="card-body">
                {{ form_start(formView) }}
                {{ form_row(formView.name) }}
                {{ form_errors(formView) }}
+               <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Ajouter un groupe</button>
+            </div>
          </div>
- 
-         <div class="col">
-        <h2>Les groupes présents à "{{ event.name }}"</h2>
+
+       </div>
+        <div class="row">
+        <div class="col">
+        <h2 class="mt-5 mb-5">Les groupes présents</h2>
 
             {% if groups|length > 0 %}
 
@@ -43,12 +51,13 @@
                 {% endfor %}
              </tbody>
             </table>
-
+            {% else %}
+                <p>Aucun groupe n'est actuellement inscrit à l'événement "{{ event.name }}"</p>
             {% endif %}
 
          </div>
+        </div>
       </div>
-    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Ajouter un groupe</button>
    </div>
     {{ form_end(formView) }}
 {% endblock %}
