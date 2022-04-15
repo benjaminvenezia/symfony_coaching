@@ -10,19 +10,20 @@
 
         
 
-    {{ form_start(formView) }}
-
-    {{ form_errors(formView) }}
+    
 
    <div class="container">
       <div class="row">
+         <div class="col">
       <h2>Ajouter un groupe</h2>
-         <div class="col">
+               {{ form_start(formView) }}
                {{ form_row(formView.name) }}
+               {{ form_errors(formView) }}
          </div>
-      </div>
-      <div class="row">
+ 
          <div class="col">
+        <h2>Les groupes présents.</h2>
+
             {% if groups|length > 0 %}
             <ul>
                 {% for group in groups %}
