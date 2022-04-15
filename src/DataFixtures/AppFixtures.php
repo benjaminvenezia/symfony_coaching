@@ -33,7 +33,7 @@ class AppFixtures extends Fixture
             $randomKeyName = array_rand($namesGroup, 1);
             $group->setName('Le groupe de '. $namesGroup[$randomKeyName]);
 
-            $randomListTokenFromNbEvents = rand(1, NB_EVENTS);
+            $randomListTokenFromNbEvents = rand(0, NB_EVENTS);
             $group->setLinkToken('linkToken'.$randomListTokenFromNbEvents);
             $group->setLastArchived(new DateTime('now'));
             $manager->persist($group);

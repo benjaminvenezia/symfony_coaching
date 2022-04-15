@@ -9,27 +9,41 @@
     {% endif %}
 
         
-
-    
-
    <div class="container">
       <div class="row">
          <div class="col">
-      <h2>Ajouter un groupe</h2>
+                <h2>Ajouter un groupe</h2>
                {{ form_start(formView) }}
                {{ form_row(formView.name) }}
                {{ form_errors(formView) }}
          </div>
  
          <div class="col">
-        <h2>Les groupes présents.</h2>
+        <h2>Les groupes présents à {{ event.name }}</h2>
 
             {% if groups|length > 0 %}
-            <ul>
+
+            <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Nom du groupe</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Supprimer</th>
+                    <th scope="col">Voir tickets</th>
+                </tr>
+            </thead>
+            <tbody>
                 {% for group in groups %}
-                    <li>{{ group.name }} {{ group.lastArchived|date("m/d/Y") }}</li>
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        <td>{{ group.lastArchived|date("m/d/Y") }} </td>
+                        <td><button class="btn btn-danger">retirer le groupe</button></td>
+                        <td><button class="btn btn-success">Tickets</button></td>
+                    </tr>
                 {% endfor %}
-            </ul>
+             </tbody>
+            </table>
+
             {% endif %}
 
          </div>
