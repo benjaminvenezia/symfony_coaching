@@ -23,12 +23,9 @@ class NavigationController extends AbstractController
     public function homepage(EntityManagerInterface $em,Request $request, EventRepository $eventRepository): Response
     {
         $event = new Event();
-    
         $formCreateEvent = $this->createForm(CreateEventType::class, $event);
-    
         $formCreateEvent->handleRequest($request);
        
-
          if($formCreateEvent->isSubmitted() && $formCreateEvent->isValid()) {
             $em->persist($event);
             $em->flush();
@@ -52,7 +49,7 @@ class NavigationController extends AbstractController
     }
 
     #[Route('/login', name: 'navigation_login')]
-    public function login(EntityManagerInterface $em,Request $request, EventRepository $eventRepository): Response
+    public function login(Request $request, EventRepository $eventRepository): Response
     {
         $formLogin = $this->createForm(TokenLoginType::class);
 

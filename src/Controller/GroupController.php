@@ -8,6 +8,7 @@ use App\Entity\Ticket;
 use App\Form\TicketType;
 use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
+use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,12 +20,14 @@ class GroupController extends AbstractController
     protected $em;
     protected $groupRepository;
     protected $eventRepository;
+    protected $ticketRepository;
 
-    public function __construct(EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository)
+    public function __construct(EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository)
     {
         $this->em = $em;
         $this->groupRepository = $groupRepository;
         $this->eventRepository = $eventRepository;
+        $this->ticketRepository = $ticketRepository;
     }
 
     
@@ -70,10 +73,13 @@ class GroupController extends AbstractController
             throw $this->createNotFoundException("Le groupe n'existe pas.");
         }
 
+        $ticketsGroup = $this->ticketRepository->findBY(['group_ticket_id' => $group->getId()]);
+
+
         if($linkTokenParam !== $group->getLinkToken()){
             throw $this->createNotFoundException("Le groupe n'existe pas.");
         }
-           
+
         $ticket = new Ticket();
         $ticket->setGroupTicketId($group);
         $formTicket= $this->createForm(TicketType::class, $ticket);
@@ -94,7 +100,8 @@ class GroupController extends AbstractController
             "linktoken" => $linkTokenParam,
             "formView" => $form,
             "id" => $id,
-            "group" => $group
+            "group" => $group,
+            "tickets" => $ticketsGroup
         ]);   
     }
 }

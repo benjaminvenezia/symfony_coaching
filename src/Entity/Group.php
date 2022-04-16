@@ -30,8 +30,8 @@ class Group
     #[ORM\OneToMany(mappedBy: 'group_event', targetEntity: Event::class)]
     private $link_token;
 
-    #[ORM\OneToMany(mappedBy: 'linkToken', targetEntity: Ticket::class)]
-    private $tickets;
+    // #[ORM\OneToMany(mappedBy: 'linkToken', targetEntity: Ticket::class)]
+    // private $tickets;
 
     #[ORM\Column(type: 'integer')]
     private $helped_counter;
@@ -45,7 +45,7 @@ class Group
     public function __construct()
     {
         $this->link_token = new ArrayCollection();
-        $this->tickets = new ArrayCollection();
+        // $this->tickets = new ArrayCollection();
         $this->helped_counter = 0;
         $this->group_id = new ArrayCollection();
     }
@@ -113,13 +113,15 @@ class Group
         return $this;
     }
 
-    /**
-     * @return Collection<int, Ticket>
-     */
-    public function getTickets(): Collection
-    {
-        return $this->tickets;
-    }
+    
+
+    // /**
+    //  * @return Collection<int, Ticket>
+    //  */
+    // public function getTickets(): Collection
+    // {
+    //     return $this->tickets;
+    // }
 
     // public function addTicket(Ticket $ticket): self
     // {

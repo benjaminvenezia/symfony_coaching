@@ -29,8 +29,11 @@
        <div class="row mt-5">
             <h3>Vos tickets</h3>
              <div class="container mt-5">
-
-
+                <div class="row mt-5">
+                    {% for ticket in tickets %}
+                    {% include "shared/_ticket.html.twig" %}
+                    {% endfor %}
+                </div>
              </div>
        </div>
        
