@@ -27,6 +27,9 @@ class Ticket
     #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'group_id')]
     private $group_ticket_id;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $title;
+
     // #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tickets')]
     // private $linkToken;
 
@@ -98,6 +101,18 @@ class Ticket
     public function setGroupTicketId(?Group $group_ticket_id): self
     {
         $this->group_ticket_id = $group_ticket_id;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }

@@ -75,7 +75,6 @@ class GroupController extends AbstractController
 
         $ticketsGroup = $this->ticketRepository->findBY(['group_ticket_id' => $group->getId()]);
 
-
         if($linkTokenParam !== $group->getLinkToken()){
             throw $this->createNotFoundException("Le groupe n'existe pas.");
         }

@@ -15,6 +15,7 @@
             </div>
             <div class="card-body">
                {{ form_start(formView) }}
+               {{ form_row(formView.title) }}
                {{ form_row(formView.request) }}
                {{ form_widget(formView._token)}}
                {{ form_errors(formView) }}
