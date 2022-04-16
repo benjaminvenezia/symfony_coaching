@@ -39,11 +39,15 @@ class Group
     #[ORM\Column(type: 'datetime', nullable: true)]
     private $last_helped;
 
+    #[ORM\OneToMany(mappedBy: 'group_ticket_id', targetEntity: Ticket::class)]
+    private $group_id;
+
     public function __construct()
     {
         $this->link_token = new ArrayCollection();
         $this->tickets = new ArrayCollection();
         $this->helped_counter = 0;
+        $this->group_id = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,27 +121,27 @@ class Group
         return $this->tickets;
     }
 
-    public function addTicket(Ticket $ticket): self
-    {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets[] = $ticket;
-            $ticket->setLinkToken($this);
-        }
+    // public function addTicket(Ticket $ticket): self
+    // {
+    //     if (!$this->tickets->contains($ticket)) {
+    //         $this->tickets[] = $ticket;
+    //         $ticket->setLinkToken($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeTicket(Ticket $ticket): self
-    {
-        if ($this->tickets->removeElement($ticket)) {
-            // set the owning side to null (unless already changed)
-            if ($ticket->getLinkToken() === $this) {
-                $ticket->setLinkToken(null);
-            }
-        }
+    // public function removeTicket(Ticket $ticket): self
+    // {
+    //     if ($this->tickets->removeElement($ticket)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($ticket->getLinkToken() === $this) {
+    //             $ticket->setLinkToken(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getHelpedCounter(): ?int
     {
@@ -164,6 +168,36 @@ class Group
     public function setLastHelped(?\DateTimeInterface $last_helped): self
     {
         $this->last_helped = $last_helped;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getGroupId(): Collection
+    {
+        return $this->group_id;
+    }
+
+    public function addGroupId(Ticket $groupId): self
+    {
+        if (!$this->group_id->contains($groupId)) {
+            $this->group_id[] = $groupId;
+            $groupId->setGroupTicketId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupId(Ticket $groupId): self
+    {
+        if ($this->group_id->removeElement($groupId)) {
+            // set the owning side to null (unless already changed)
+            if ($groupId->getGroupTicketId() === $this) {
+                $groupId->setGroupTicketId(null);
+            }
+        }
 
         return $this;
     }

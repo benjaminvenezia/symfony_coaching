@@ -1,6 +1,6 @@
 <?php
 // src/DataFixtures/AppFixtures.php
-namespace App\DataFixtures;
+
 
 use App\Entity\Event;
 use App\Entity\Group;

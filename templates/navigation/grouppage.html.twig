@@ -1,0 +1,38 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Liste des 
+{% endblock %}
+{% block body %}
+
+
+ <div class="container mt-5">
+    <h2>Bonjour, {{group.name}} </h2>
+    <div class="row mt-5">
+         <div class="col-5 card">
+            <div class="card-header">
+              <p>Ajouter un ticket pour ce groupe.</p>
+            </div>
+            <div class="card-body">
+               {{ form_start(formView) }}
+               {{ form_row(formView.request) }}
+               {{ form_widget(formView._token)}}
+               {{ form_errors(formView) }}
+               <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Ajouter un Ticket</button>
+            </div>
+         </div>
+
+         <div class="col-5">
+            <p>Ajouter des tickets.</p>
+         </div>
+       </div>
+       <div class="row mt-5">
+            <h3>Vos tickets</h3>
+             <div class="container mt-5">
+
+
+             </div>
+       </div>
+       
+    
+{% endblock %}

@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-    Liste des 
+    Gestion de l'événenement!
 {% endblock %}
 {% block body %}
     {% if event %}
@@ -59,7 +59,7 @@
                         
                         
                         <td><a href="{{ path('group_delete', {id: group.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
-                        <td><button class="btn btn-success">Page du groupe</button></td>
+                        <td><a href="{{ path('group_show', {id: group.id, linkTokenParam: group.linkToken}) }}" class="btn btn-success">Page du groupe</a></td>
                         <td><button class="btn btn-success">Tickets</button></td>
                         <td class="text-center"><span >{{ group.helpedCounter }}</span></td>
                         <td><a href="{{ path('group_help', {id: group.id}) }}" class="btn btn-success">Aider</a></td>

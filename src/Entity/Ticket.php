@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TicketRepository;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
@@ -22,8 +24,18 @@ class Ticket
     #[ORM\Column(type: 'datetime')]
     private $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tickets')]
-    private $linkToken;
+    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'group_id')]
+    private $group_ticket_id;
+
+    // #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tickets')]
+    // private $linkToken;
+
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTimeImmutable('now');
+        $this->updatedAt = new DateTime('now');
+    }
 
     public function getId(): ?int
     {
@@ -66,14 +78,26 @@ class Ticket
         return $this;
     }
 
-    public function getLinkToken(): ?Group
+    // public function getLinkToken(): ?Group
+    // {
+    //     return $this->linkToken;
+    // }
+
+    // public function setLinkToken(?Group $linkToken): self
+    // {
+    //     $this->linkToken = $linkToken;
+
+    //     return $this;
+    // }
+
+    public function getGroupTicketId(): ?Group
     {
-        return $this->linkToken;
+        return $this->group_ticket_id;
     }
 
-    public function setLinkToken(?Group $linkToken): self
+    public function setGroupTicketId(?Group $group_ticket_id): self
     {
-        $this->linkToken = $linkToken;
+        $this->group_ticket_id = $group_ticket_id;
 
         return $this;
     }
