@@ -61,7 +61,7 @@ class EventController extends AbstractController
             'linkToken' => $adminToken, //link token is the same than adminToken in this implementation... 
         ], ['last_helped' => 'ASC']);
         
-        return $this->render('navigation/groupspage.html.twig', [
+        return $this->render('navigation/eventpage.html.twig', [
             'formView' => $formView, 
             'groups' => $groups,
             'event' => $event
