@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Services\ClassService;
-use Symfony\Component\Validator\Constraints\Length;
 
 class EventController extends AbstractController
 {
@@ -71,14 +70,6 @@ class EventController extends AbstractController
             $n = count($ticketRepository->findBy(['group_ticket_id' => $g->getId()]));
             $counterTicketsForThisEvent += $n;
         }
-      
-        //returns ticket for this event
-        // $tickets = $ticketRepository->createQueryBuilder('u')
-        // ->select('count(u.id)')
-        // ->getQuery()
-        // ->getSingleScalarResult();
-        
-
         
         return $this->render('navigation/eventpage.html.twig', [
             'nbArticles' => $counterTicketsForThisEvent,
