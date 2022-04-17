@@ -15,11 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Services\ClassService;
+use Symfony\Component\Validator\Constraints\Length;
 
 class EventController extends AbstractController
 {
     #[Route('/event/{adminToken}/groups', name: 'event_show')]
-    public function show(Request $request, string $adminToken, ClassService $classService, GroupRepository $groupRepository, EventRepository $eventRepository, EntityManagerInterface $em): Response
+    public function show(Request $request, string $adminToken, ClassService $classService, GroupRepository $groupRepository,TicketRepository $ticketRepository, EventRepository $eventRepository, EntityManagerInterface $em): Response
     {
         /**
          * @var Group $group 
@@ -38,8 +39,6 @@ class EventController extends AbstractController
         ]);
 
         if($form->isSubmitted() && $form->isValid()) {
-            //on genère un nouveau token qu'on associe au groupe
-
             /**
              * @var String $groupToken random key associated to event.
              */
@@ -55,18 +54,23 @@ class EventController extends AbstractController
                 "adminToken" => $adminToken,
             ]);
         }
+
         $formView = $form->createView();
-        
+
         //returns groups of this event
         $groups = $groupRepository->findBy([
             'event' => $event->getId(), 
         ], ['last_helped' => 'ASC']);
 
-        // $tickets = [];
-        // foreach ($groups as $g){
-        //     $ticketsForThisGroup = $ticketRepository->findBy(['group_ticket_id' => $g->getId()]);
-        //     array_push($tickets, $ticketsForThisGroup);
-        // }
+        /**
+         * @var int $counterTicketsForThisEvent number of tickets for all the groups of the event.
+         */
+        $counterTicketsForThisEvent = 0;
+
+        foreach ($groups as $g){
+            $n = count($ticketRepository->findBy(['group_ticket_id' => $g->getId()]));
+            $counterTicketsForThisEvent += $n;
+        }
       
         //returns ticket for this event
         // $tickets = $ticketRepository->createQueryBuilder('u')
@@ -77,6 +81,7 @@ class EventController extends AbstractController
 
         
         return $this->render('navigation/eventpage.html.twig', [
+            'nbArticles' => $counterTicketsForThisEvent,
             'adminToken' => $adminToken,
             'formView' => $formView, 
             'groups' => $groups,

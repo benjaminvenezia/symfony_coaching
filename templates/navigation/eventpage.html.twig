@@ -36,7 +36,15 @@
                 <tbody>
                     <tr>
                         <td><span style="font-size:12px;" class="bg-warning p-1 text-white text-sm rounded"><i class="fa fa-lock" aria-hidden="true"></i> {{ event.adminLinkToken }}</span></td>
-                        <td><a href="{{ path('tickets_show', {adminLinkToken: adminToken}) }}">Tickets</a> </td>
+                        <td>
+                        {% if nbArticles == 0 %}
+                            <span>Aucun ticket(s) associé à cet événement.</span>
+                        {% elseif nbArticles == 1 %}
+                            <a href="{{ path('tickets_show', {adminLinkToken: adminToken}) }}">Il n y a qu'un seul ticket.</a>
+                        {% else %}
+                            <a href="{{ path('tickets_show', {adminLinkToken: adminToken}) }}">Il y a {{nbArticles}} Tickets.</a>
+                        {% endif %}
+                         </td>
                     </tr>
                   
                 </tbody>
