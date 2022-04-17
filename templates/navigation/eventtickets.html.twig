@@ -6,11 +6,16 @@
 {% block body %}
     <div class="mt-5 blur shadow-lg p-5">
         <a href="{{path('event_show', {adminToken})}}" class="btn btn-primary mb-2">< Retour à l'événement</a>
-        <h1>Les tickets de l'ensemble des groupes de l'événement {{event.name}}</h1>
-         {% for tick in tickets %}
-            {% for ticket in tick %}
-                {% include "shared/_ticket.html.twig" %}
-            {% endfor %}
-        {% endfor %}    
+        <h1 class="h4 mt-5">Les tickets de l'ensemble des groupes de l'événement {{event.name}}</h1>
+       
+        {% if tickets|length == 0 %}
+            <p>Aucun ticket</p>
+        {% else %}
+             {% for ticket in tickets %}
+                {% for item in ticket %}
+                    {% include "shared/_ticketgroup.html.twig" %}
+                {% endfor %}
+            {% endfor %}    
+        {% endif %}
     </div>
 {% endblock %}

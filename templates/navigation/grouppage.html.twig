@@ -30,10 +30,16 @@
        <div class="row mt-5">
             <h3>Vos tickets</h3>
              <div class="container mt-5">
-                <div class="row mt-5">
+                <div class="row mt-2">
+                {% if tickets|length == 0 %}
+                    <p>Aucun ticket n'a encore été crée.</p>
+
+                {% else %}
                     {% for ticket in tickets %}
-                    {% include "shared/_ticket.html.twig" %}
+                        {% include "shared/_ticketgroup.html.twig" %}
                     {% endfor %}
+                {% endif %}
+                
                 </div>
              </div>
        </div>
