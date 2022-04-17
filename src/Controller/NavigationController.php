@@ -53,7 +53,7 @@ class NavigationController extends AbstractController
         ]);
     }
 
-    #[Route('/login', name: 'navigation_login')]
+    #[Route('/logincoach', name: 'navigation_logincoach')]
     public function login(Request $request, EventRepository $eventRepository): Response
     {
         $formLogin = $this->createForm(TokenLoginType::class);
@@ -77,7 +77,7 @@ class NavigationController extends AbstractController
 
         $formViewLogin = $formLogin->createView();
 
-        return $this->render('navigation/login.html.twig', [
+        return $this->render('navigation/logincoach.html.twig', [
             'formViewLogin' => $formViewLogin,
         ]);
 

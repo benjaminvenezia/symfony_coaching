@@ -4,7 +4,7 @@
     Création d'un Evenement
 {% endblock %}
 {% block body %}
-    <h1 class="mb-5 mt-5">Bienvenue sur Coach</h1>
+   <h1 class="mb-5 mt-5">Bienvenue sur Coach</h1>
 
    <div class="container text-white shadow-lg">
       <div class="row bg-secondary p-5 ">
@@ -15,13 +15,15 @@
                {{ form_row(formView.email) }}
                {# {{ form_row(formView.adminLinkToken)}} #}
                {{ form_errors(formView) }}
+
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Créer l'événement</button>
+               {{ form_end(formView) }}
         </div>
         <div class="col m-5">
             
             <h2 class="text-white">Accéder à votre événement</h2>
 
-            <a class="btn btn-primary btn-lg" href="{{path('navigation_login')}}">Accéder à mon groupe</a>
+            <a class="btn btn-primary btn-lg" href="{{path('navigation_logincoach')}}">Je manage mon événement</a>
             {# {% if events|length > 0 %}
                 <ul>
                     {% for event in events %}
@@ -49,8 +51,19 @@
            "icon" : "fas fa-lock", 
            "text" : "Nous sommes garants de la sécurité de vos données, aucune données sensible requise." 
         } %}
-    </div>
+     </div>
     </div>
    </div>
-    {{ form_end(formView) }}
+   <div class="container text-white shadow-lg mt-5">
+      <div class="row bg-secondary p-5 ">
+       
+        <div class="col mx-auto">
+            
+            <h2 class="text-white">Accéder à mon groupe</h2>
+
+            <a class="btn btn-primary btn-lg" href="{{path('navigation_logincoach')}}">Accéder à mon groupe</a>
+
+        </div>
+    </div>
+   </div>
 {% endblock %}

@@ -13,8 +13,8 @@ class TokenLoginType extends AbstractType
     {
         $builder
             ->add('adminLinkToken', PasswordType::class, [
-                'label' => 'Entrez votre mot de passe.',
-                'attr' => ['placeholder' => 'secret12344'],
+                'label' => 'Bonjour Coach, accédez à votre événement en utilisant le token généré lors de la création de l\'événement.',
+                'attr' => ['placeholder' => 'Tk5a3CnUsWKJM73bq9B9_PEvV_D1UaxLlp'],
                 'required' => true,
             ])
         ;

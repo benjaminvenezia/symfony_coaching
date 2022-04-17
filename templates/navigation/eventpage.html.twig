@@ -4,9 +4,16 @@
     Gestion de l'événenement!
 {% endblock %}
 {% block body %}
-    {% if event %}
+
+    {% if event is not null %}
+        
+
+    
+
+
+
         <h1 class="mt-5 mb-5">Evénement : "{{ event.name }}"</h1>
-    {% endif %}
+ 
 
         
    <div class="container">
@@ -21,6 +28,7 @@
                {{ form_row(formView.name) }}
                {{ form_errors(formView) }}
                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Ajouter un groupe</button>
+               {{ form_end(formView) }}
             </div>
          </div>
          <div class="col-5">
@@ -33,7 +41,7 @@
             </thead>
                 <tbody>
                     <tr>
-                        <td>{{ event.adminLinkToken }}</td>
+                            <td>{{ event.adminLinkToken }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -91,5 +99,9 @@
         </div>
       </div>
    </div>
-    {{ form_end(formView) }}
+
+{% else %}
+    <h1>Evenement non existant</h1>
+
+{% endif %}
 {% endblock %}
