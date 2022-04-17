@@ -1,3 +1,4 @@
+{# Used in grouppage.html.twig #}
 <div class="row">
 	<div class="card mb-1">
         <div class="card-header text-center">
@@ -8,7 +9,7 @@
             <p class="card-text">{{ticket.request}}</p>
             <div class="flex">
                 <a class="btn btn-sm btn-outline-info btn-sm">Modifier</a>
-                <a class="btn btn-sm btn-outline-secondary btn-sm">Supprimer</a>
+                <a href="{{ path('ticket_delete', {ticketId: ticket.id, linkToken: group.linkToken}) }}" class="btn btn-sm btn-outline-secondary btn-sm">Supprimer</a>
             </div>
 		</div>
 	</div>
