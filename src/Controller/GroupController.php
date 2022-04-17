@@ -64,11 +64,13 @@ class GroupController extends AbstractController
         return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
 
-    #[Route('/group/{linkTokenParam}/{id}', name: 'group_show')]
-    public function show($id, $linkTokenParam, Request $request): Response
+    #[Route('/group/{linkTokenParam}', name: 'group_show')]
+    public function show($linkTokenParam, Request $request): Response
     {
-        $group = $this->groupRepository->find($id);
-       
+        //remove special chars breaking the search
+        $linkTokenParam = preg_replace('/(\v|\s)+/', ' ', $linkTokenParam);
+        $group = $this->groupRepository->findOneBy(['linkToken' => $linkTokenParam]);
+
         if(!$group) {
             throw $this->createNotFoundException("Le groupe n'existe pas.");
         }
@@ -88,7 +90,6 @@ class GroupController extends AbstractController
             $this->em->persist($ticket);
             $this->em->flush();
             return $this->redirectToRoute('group_show', [
-                "id" => $id,
                 "linkTokenParam" => $linkTokenParam
             ]);            
         }
@@ -98,7 +99,6 @@ class GroupController extends AbstractController
         return $this->render('navigation/grouppage.html.twig', [
             "linktoken" => $linkTokenParam,
             "formView" => $form,
-            "id" => $id,
             "group" => $group,
             "tickets" => $ticketsGroup
         ]);   

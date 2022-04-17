@@ -54,7 +54,7 @@ class NavigationController extends AbstractController
     }
 
     #[Route('/logincoach', name: 'navigation_logincoach')]
-    public function login(Request $request, EventRepository $eventRepository): Response
+    public function loginCoach(Request $request, EventRepository $eventRepository): Response
     {
         $formLogin = $this->createForm(TokenLoginType::class);
 
@@ -80,6 +80,31 @@ class NavigationController extends AbstractController
         return $this->render('navigation/logincoach.html.twig', [
             'formViewLogin' => $formViewLogin,
         ]);
+
+    }
+
+    #[Route('/loginuser', name: 'navigation_loginuser')]
+    public function loginUser(Request $request, GroupRepository $groupRepository, EventRepository $eventRepository): Response
+    {
+        $formLogin = $this->createForm(TokenLoginType::class);
+
+        $formLogin->handleRequest($request);
+       
+        if($formLogin->isSubmitted() && $formLogin->isValid()) {
+            $data = $formLogin->getData();
+            $tokenName = $data['adminLinkToken']; //user token
+            
+            return $this->redirectToRoute('group_show', [
+                "linkTokenParam" => $tokenName,
+            ]);            
+        }
+
+        $formViewLogin = $formLogin->createView();
+
+        return $this->render('navigation/loginuser.html.twig', [
+            'formViewLogin' => $formViewLogin,
+        ]);
+
     }
 
     //page B
