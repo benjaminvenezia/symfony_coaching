@@ -15,22 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Services\ClassService;
-use Symfony\Component\Validator\Constraints\Length;
 
 class EventController extends AbstractController
 {
-
-    protected $em;
-    protected $eventRepository;
-
-    public function __construct(EntityManagerInterface $em, EventRepository $eventRepository)
-    {
-        $this->em = $em;
-        $this->eventRepository = $eventRepository;
-    }
-
     #[Route('/event/{adminToken}/groups', name: 'event_show')]
-    public function show(Request $request, $adminToken, ClassService $classService, GroupRepository $groupRepository, TicketRepository $ticketRepository): Response
+    public function show(Request $request, $adminToken, ClassService $classService, GroupRepository $groupRepository, EventRepository $eventRepository, EntityManagerInterface $em): Response
     {
         //créer un nouveau groupe
         $group = new Group();
@@ -40,7 +29,7 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
          //return event
-         $event = $this->eventRepository->findOneBy([
+         $event = $eventRepository->findOneBy([
             'adminLinkToken' => $adminToken
         ]);
 
@@ -51,8 +40,8 @@ class EventController extends AbstractController
             $group->setLastArchived(new DateTime());
             $group->setEvent($event);
 
-            $this->em->persist($group);
-            $this->em->flush();
+            $em->persist($group);
+            $em->flush();
 
             return $this->redirectToRoute('event_show', [
                 "adminToken" => $adminToken,

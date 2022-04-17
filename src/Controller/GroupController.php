@@ -17,27 +17,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GroupController extends AbstractController
 {
-    protected $em;
-    protected $groupRepository;
-    protected $eventRepository;
-    protected $ticketRepository;
+    // protected $em;
+    // protected $groupRepository;
+    // protected $eventRepository;
+    // protected $ticketRepository;
 
-    public function __construct(EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository)
-    {
-        $this->em = $em;
-        $this->groupRepository = $groupRepository;
-        $this->eventRepository = $eventRepository;
-        $this->ticketRepository = $ticketRepository;
-    }
+    // public function __construct(EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository)
+    // {
+    //     $this->em = $em;
+    //     $this->groupRepository = $groupRepository;
+    //     $this->eventRepository = $eventRepository;
+    //     $this->ticketRepository = $ticketRepository;
+    // }
 
     
     #[Route('/group/delete/{id}', name: 'group_delete')]
-    public function delete($id): Response
+    public function delete($id, GroupRepository $groupRepository, EntityManagerInterface $em): Response
     {
         /**
          * @var Group $group
          */
-        $group = $this->groupRepository->find($id);
+        $group = $groupRepository->find($id);
         /**
          * @var String $adminToken
          */
@@ -47,41 +47,42 @@ class GroupController extends AbstractController
             throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
         }
 
-        $this->em->remove($group);
-        $this->em->flush();
+        $em->remove($group);
+        $em->flush();
 
         return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
 
     #[Route('/group/help/{id}', name: 'group_help')]
-    public function help($id): Response
+    public function help($id ,GroupRepository $groupRepository, EntityManagerInterface $em): Response
     {
-        $group = $this->groupRepository->find($id);
+        $group = $groupRepository->find($id);
         $adminToken = $group->getEvent()->getAdminLinkToken();
 
         if(!$group) {
-            throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
+          throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
         }
         
         $group->incrementHelpedCounter();
-        $this->em->persist($group);
-        $this->em->flush();
+
+        $em->persist($group);
+        $em->flush();
 
         return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
 
     #[Route('/group/{linkTokenParam}', name: 'group_show')]
-    public function show($linkTokenParam, Request $request): Response
+    public function show($linkTokenParam, GroupRepository $groupRepository, TicketRepository $ticketRepository, EntityManagerInterface $em, Request $request): Response
     {
         //remove special chars breaking the search
         $linkTokenParam = preg_replace('/(\v|\s)+/', ' ', $linkTokenParam);
-        $group = $this->groupRepository->findOneBy(['linkToken' => $linkTokenParam]);
+        $group = $groupRepository->findOneBy(['linkToken' => $linkTokenParam]);
 
         if(!$group) {
             throw $this->createNotFoundException("Le groupe n'existe pas.");
         }
 
-        $ticketsGroup = $this->ticketRepository->findBY(['group_ticket_id' => $group->getId()]);
+        $ticketsGroup = $ticketRepository->findBY(['group_ticket_id' => $group->getId()]);
 
         if($linkTokenParam !== $group->getLinkToken()){
             throw $this->createNotFoundException("Le groupe n'existe pas.");
@@ -93,8 +94,8 @@ class GroupController extends AbstractController
         $formTicket->handleRequest($request);
         
         if($formTicket->isSubmitted() && $formTicket->isValid()) {
-            $this->em->persist($ticket);
-            $this->em->flush();
+            $em->persist($ticket);
+            $em->flush();
             return $this->redirectToRoute('group_show', [
                 "linkTokenParam" => $linkTokenParam
             ]);            
