@@ -35,7 +35,7 @@ class GroupController extends AbstractController
     public function delete($id): Response
     {
         $group = $this->groupRepository->find($id);
-        $adminToken = $group->getLinkToken();
+        $adminToken = $group->getEvent()->getAdminLinkToken();
 
         if(!$group) {
             throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
@@ -51,7 +51,7 @@ class GroupController extends AbstractController
     public function help($id): Response
     {
         $group = $this->groupRepository->find($id);
-        $adminToken = $group->getLinkToken();
+        $adminToken = $group->getEvent()->getAdminLinkToken();
 
         if(!$group) {
             throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
