@@ -21,7 +21,7 @@ class Ticket
     #[Assert\NotBlank]
     #[Assert\Length(
         min: 7,
-        max: 22,
+        max: 2000,
         minMessage: 'Votre description doit faire {{ limit }} caractères au minimum.',
         maxMessage: 'Votre description doit faire {{ limit }} caractères au maximum.',
     )]

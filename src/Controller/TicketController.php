@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use Doctrine\Common\EventManager;
 use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,13 +20,12 @@ class TicketController extends AbstractController
         $event = $eventRepository->findOneBy([
             'adminLinkToken' => $adminLinkToken
         ]);
-        
+
         //find groups by event
         $groups = $groupRepository->findBy([
             'event' => $event->getId(), 
         ], ['last_helped' => 'ASC']);
         
-
         /**
          * @var Ticket[] $tickets
          */
@@ -47,7 +44,7 @@ class TicketController extends AbstractController
     }
 
     #[Route('/{linkToken}/ticket/{ticketId}/delete', name: 'ticket_delete')]
-    public function delete(string $linkToken, $ticketId,EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository): Response
+    public function delete(string $linkToken, $ticketId,EntityManagerInterface $em, TicketRepository $ticketRepository): Response
     {
         //find ticket 
         $ticket = $ticketRepository->find($ticketId);
