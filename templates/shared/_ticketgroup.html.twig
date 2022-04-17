@@ -1,11 +1,11 @@
 <div class="row">
 	<div class="card mb-1">
         <div class="card-header text-center">
-			<h3 class="card-text h5">{{ticket.title}}</h3>
-			<p class="card-text">{{ticket.createdAt|date("d/m/Y")}}</p>
+			<h3 class="card-text h5">{{item.title}}</h3>
+			<p class="card-text">{{item.createdAt|date("d/m/Y")}}</p>
 		</div>
 		<div class="card-body">
-            <p class="card-text">{{ticket.request}}</p>
+            <p class="card-text">{{item.request}}</p>
             <div class="flex">
                 <a class="btn btn-sm btn-outline-info btn-sm">Modifier</a>
                 <a class="btn btn-sm btn-outline-secondary btn-sm">Supprimer</a>
