@@ -48,12 +48,13 @@ class Ticket
 
     // #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tickets')]
     // private $linkToken;
-
+    private $status;
 
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable('now');
         $this->updatedAt = new DateTime('now');
+        $this->status = new Status();
     }
 
     public function getId(): ?int
@@ -132,4 +133,5 @@ class Ticket
 
         return $this;
     }
+
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\Group;
+use App\Entity\Status;
 use App\Entity\Ticket;
 use App\Form\TicketType;
 use App\Repository\EventRepository;
@@ -87,12 +88,20 @@ class GroupController extends AbstractController
         }
 
         $ticket = new Ticket();
+        $status = new Status();
+
+        $status->setName('status de test');
+        $status->setIsArchived(false);
+        $status->setTicketStatus($ticket);
+
         $ticket->setGroupTicketId($group);
         $formTicket= $this->createForm(TicketType::class, $ticket);
         $formTicket->handleRequest($request);
         
         if($formTicket->isSubmitted() && $formTicket->isValid()) {
             $em->persist($ticket);
+            $em->persist($status);
+
             $em->flush();
             return $this->redirectToRoute('group_show', [
                 "linkTokenParam" => $linkTokenParam

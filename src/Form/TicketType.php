@@ -25,13 +25,13 @@ class TicketType extends AbstractType
                 'attr' => ['placeholder' => 'description du ticket', 'cols' => '5', 'rows' => '5'],
                 'required' => true,
             ])
-            ->add('isAttending', ChoiceType::class, [
-                'choices'  => [
-                    'Maybe' => null,
-                    'Yes' => true,
-                    'No' => false,
-                ],
-            ])
+            // ->add('isAttending', ChoiceType::class, [
+            //     'choices'  => [
+            //         'Maybe' => null,
+            //         'Yes' => true,
+            //         'No' => false,
+            //     ],
+            // ])
         ;
     }
 
