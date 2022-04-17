@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\Table(name: '`group`')]
@@ -18,6 +19,13 @@ class Group
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 7,
+        max: 255,
+        minMessage: 'Le nom du groupe doit faire {{ limit }} caractères au minimum.',
+        maxMessage: 'Le nom du groupe doit faire {{ limit }} caractères au maximum.',
+    )]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255)]

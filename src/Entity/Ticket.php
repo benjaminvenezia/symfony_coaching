@@ -6,6 +6,8 @@ use App\Repository\TicketRepository;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 class Ticket
@@ -15,7 +17,14 @@ class Ticket
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 2024)]
+    #[ORM\Column(type: 'string', length: 2000)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 7,
+        max: 22,
+        minMessage: 'Votre description doit faire {{ limit }} caractères au minimum.',
+        maxMessage: 'Votre description doit faire {{ limit }} caractères au maximum.',
+    )]
     private $request;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -28,6 +37,13 @@ class Ticket
     private $group_ticket_id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 7,
+        max: 50,
+        minMessage: 'Votre titre doit faire {{ limit }} caractères au minimum.',
+        maxMessage: 'Votre titre doit faire {{ limit }} caractères au maximum.',
+    )]
     private $title;
 
     // #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tickets')]

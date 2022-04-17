@@ -6,6 +6,8 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -16,12 +18,20 @@ class Event
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 7,
+        max: 255,
+        minMessage: 'Le nom de votre événement doit faire {{ limit }} caractères au minimum.',
+        maxMessage: 'Le nom de votre événement doit faire {{ limit }} caractères au maximum.',
+    )]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $adminLinkToken;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
     private $email;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Group::class)]
