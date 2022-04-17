@@ -15,25 +15,30 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Services\ClassService;
 
 class NavigationController extends AbstractController
 {
     //page A
     #[Route('/', name: 'homepage')]
-    public function homepage(EntityManagerInterface $em,Request $request, EventRepository $eventRepository): Response
+    public function homepage(EntityManagerInterface $em,Request $request, EventRepository $eventRepository, ClassService $classService): Response
     {
         $event = new Event();
         $formCreateEvent = $this->createForm(CreateEventType::class, $event);
         $formCreateEvent->handleRequest($request);
        
          if($formCreateEvent->isSubmitted() && $formCreateEvent->isValid()) {
+            //on genère un token.
+            $generatedToken = $classService->generateToken();
+            $event->setAdminLinkToken($generatedToken);
+
             $em->persist($event);
             $em->flush();
             
-            $token = $event->getAdminLinkToken();
+            // $token = $event->getAdminLinkToken();
 
             return $this->redirectToRoute('event_show', [
-                "adminToken" => $token,
+                "adminToken" => $generatedToken,
             ]);
         } 
         

@@ -6,20 +6,20 @@
 {% block body %}
     <h1 class="mb-5 mt-5">Bienvenue sur Coach</h1>
 
-   <div class="container">
-      <div class="row">
+   <div class="container text-white shadow-lg">
+      <div class="row bg-secondary p-5 ">
         <div class="col-5 m-5">
-               <h2>Créer votre événement</h2>
+               <h2 class="text-white">Créer votre événement</h2>
                {{ form_start(formView) }}
                {{ form_row(formView.name) }}
                {{ form_row(formView.email) }}
-               {{ form_row(formView.adminLinkToken)}}
+               {# {{ form_row(formView.adminLinkToken)}} #}
                {{ form_errors(formView) }}
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Créer l'événement</button>
         </div>
         <div class="col m-5">
             
-            <h2>Accéder à votre événement</h2>
+            <h2 class="text-white">Accéder à votre événement</h2>
 
             <a class="btn btn-primary btn-lg" href="{{path('navigation_login')}}">Accéder à mon groupe</a>
             {# {% if events|length > 0 %}

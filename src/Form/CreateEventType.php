@@ -20,11 +20,11 @@ class CreateEventType extends AbstractType
                 'attr' => ['placeholder' => 'Nom de l\'événement.'],
                 'required' => true,
             ])
-            ->add('adminLinkToken', PasswordType::class, [
-                'label' => 'Mot de passe.',
-                'attr' => ['placeholder' => 'Conservez ce petit token précieusement.'],
-                'required' => true,
-            ])
+            // ->add('adminLinkToken', PasswordType::class, [
+            //     'label' => 'Mot de passe.',
+            //     'attr' => ['placeholder' => 'Conservez ce petit token précieusement.'],
+            //     'required' => true,
+            // ])
             ->add('email', EmailType::class, [
                 'label' => 'Précisez votre Email.',
                 'attr' => ['Précisez votre Email.'],
