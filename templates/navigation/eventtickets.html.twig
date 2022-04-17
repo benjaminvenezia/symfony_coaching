@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Les tickets.
+{% endblock %}
+{% block body %}
+    <div class="mt-5 blur shadow-lg p-5">
+        <h1>Les tickets de l'ensemble des groupes de l'événement {{event.name}}</h1>
+         {% for tick in tickets %}
+            {% for ticket in tick %}
+                {% include "shared/_ticket.html.twig" %}
+            {% endfor %}
+        {% endfor %}    
+    </div>
+{% endblock %}

@@ -4,12 +4,12 @@
     Création d'un Evenement
 {% endblock %}
 {% block body %}
-   <h1 class="mb-5 mt-5">Bienvenue sur Coach</h1>
+   <h1 class="mb-5 mt-5">Bienvenue sur CoachMe</h1>
 
-   <div class="container text-white shadow-lg">
-      <div class="row bg-secondary p-5 ">
+   <div class="container shadow-lg blur">
+      <div class="row p-5 ">
         <div class="col-5 m-5">
-               <h2 class="text-white">Créer votre événement</h2>
+               <h2>Créer votre événement</h2>
                {{ form_start(formView) }}
                {{ form_row(formView.name) }}
                {{ form_row(formView.email) }}
@@ -21,7 +21,7 @@
         </div>
         <div class="col m-5">
             
-            <h2 class="text-white">Accéder à votre événement</h2>
+            <h2>Accéder à votre événement</h2>
 
             <a class="btn btn-primary btn-lg" href="{{path('navigation_logincoach')}}">Je manage mon événement</a>
             {# {% if events|length > 0 %}
@@ -54,12 +54,12 @@
      </div>
     </div>
    </div>
-   <div class="container text-white shadow-lg mt-5">
-      <div class="row bg-secondary p-5 ">
+   <div class="container text-white shadow-lg mt-5 blur">
+      <div class="row p-5 ">
        
         <div class="col mx-auto">
             
-            <h2 class="text-white">Accéder à mon groupe</h2>
+            <h2>Accéder à mon groupe</h2>
 
             <a class="btn btn-primary btn-lg" href="{{path('navigation_loginuser')}}">Accéder à mon groupe</a>
 

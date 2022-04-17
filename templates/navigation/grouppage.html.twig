@@ -1,12 +1,12 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-    Liste des 
+    {{group.name}}
 {% endblock %}
 {% block body %}
 
 
- <div class="container mt-5">
+ <div class="container mt-5 blur shadow-lg p-5">
     <h2>Bonjour, {{group.name}} </h2>
     <div class="row mt-5">
          <div class="col-5 card">
@@ -24,7 +24,7 @@
          </div>
 
          <div class="col-5">
-            <p>Ajouter des tickets.</p>
+            <span class="badge bg-primary">Votre groupe a été aidé {{group.helpedCounter}} fois.</span>
          </div>
        </div>
        <div class="row mt-5">

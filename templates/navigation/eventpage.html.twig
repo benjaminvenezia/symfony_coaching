@@ -7,16 +7,9 @@
 
     {% if event is not null %}
         
-
-    
-
-
-
-        <h1 class="mt-5 mb-5">Evénement : "{{ event.name }}"</h1>
+    <h1 class="mt-5 mb-5">Evénement : "{{ event.name }}"</h1>
  
-
-        
-   <div class="container">
+   <div class="container blur p-5 shadow-lg">
       <div class="row">
 
          <div class="col-5 card">
@@ -27,7 +20,7 @@
                {{ form_start(formView) }}
                {{ form_row(formView.name) }}
                {{ form_errors(formView) }}
-               <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Ajouter un groupe</button>
+               <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Ajouter un groupe</button>
                {{ form_end(formView) }}
             </div>
          </div>
@@ -36,13 +29,16 @@
          <table class="table table-hover" title="Ce token est généré automatiquement lors de la création de l'événement, il est utilisé pour se connecter en tant que coach.">
             <thead>
                 <tr>
-                    <th scope="col">Votre token d'accès</th>
+                    <th scope="col">Votre token d'accès (Lié à l'événement.)</th>
+                    <th scope="col">Nombre de tickets totaux</th>
                 </tr>
             </thead>
                 <tbody>
                     <tr>
-                            <td><span class="badge bg-danger"><i class="fa fa-lock" aria-hidden="true"></i>{{ event.adminLinkToken }}</span></td>
+                        <td><span style="font-size:12px;" class="bg-warning p-1 text-white text-sm rounded"><i class="fa fa-lock" aria-hidden="true"></i> {{ event.adminLinkToken }}</span></td>
+                        <td><a href="{{ path('tickets_show', {adminLinkToken: adminToken}) }}">Tickets</a> </td>
                     </tr>
+                  
                 </tbody>
             </table>
          </div>
@@ -62,8 +58,6 @@
                     <th scope="col">Date d'ajout</th>
                     <th scope="col">Dernière aide</th>
                     <th scope="col">Retirer le groupe</th>
-                    <th scope="col">Page du groupe</th>
-                    <th scope="col">Voir tickets</th>
                     <th scope="col">Aides reçues</th>
                     <th scope="col">Aider</th>
                 </tr>
@@ -72,7 +66,7 @@
                 {% for group in groups %}
                     <tr>
                         <td>{{ group.name }}</td>
-                        <td><span class="bg-primary p-1 text-white rounded">{{ group.linkToken }}</span></td>
+                        <td><span style="font-size:12px;" class="bg-primary p-1 text-white text-sm rounded">{{ group.linkToken }}</span></td>
                         <td>{{ group.lastArchived|date("d/m/Y") }} </td>
                         {% if group.lastHelped is null %}
                             <td>Aucune aide reçue </td>
@@ -82,8 +76,6 @@
                         {% endif %}
                         
                         <td><a href="{{ path('group_delete', {id: group.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
-                        <td><a href="{{ path('group_show', {linkTokenParam: group.linkToken}) }}" class="btn btn-success">Page du groupe</a></td>
-                        <td><button class="btn btn-success">Tickets</button></td>
                         <td class="text-center"><span >{{ group.helpedCounter }}</span></td>
                         <td><a href="{{ path('group_help', {id: group.id}) }}" class="btn btn-success">Aider</a></td>
                     </tr>

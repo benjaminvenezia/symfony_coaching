@@ -1,10 +1,19 @@
-<div class="col-2">
-	<div class="card bg-warning text-center p-0 mb-1" style="height: 150px;">
-        <div class="card-header" style="overflow:hidden;">
-			<p class="card-text">{{ticket.title}}</p>
+<div class="col mb-2">
+	<div class="card">
+        <div class="card-header text-center">
+			<h3 class="card-text h5">{{ticket.title}}</h3>
+			<p class="card-text">{{ticket.createdAt|date("d/m/Y")}}</p>
 		</div>
 		<div class="card-body">
+            <p class="card-text">{{ticket.request}}</p>
             <a class="btn btn-secondary btn-sm">Voir</a>
 		</div>
 	</div>
 </div>
+
+{# <select id="ticket_priority" name="ticket[priority]" class="form-select">
+    <option value="1">Ça nous bloque complètement</option>
+    <option value="2">Nous avons besoin d’aide</option>
+    <option value="3">Petite demande qui ne presse pas trop</option>
+    <option value="4">A l’occasion, venez nous faire un retour</option>
+</select> #}

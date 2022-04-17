@@ -8,12 +8,14 @@ use App\Entity\Group;
 use App\Form\CreateGroupType;
 use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
+use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Services\ClassService;
+use Symfony\Component\Validator\Constraints\Length;
 
 class EventController extends AbstractController
 {
@@ -28,7 +30,7 @@ class EventController extends AbstractController
     }
 
     #[Route('/event/{adminToken}/groups', name: 'event_show')]
-    public function show(Request $request, $adminToken, ClassService $classService, GroupRepository $groupRepository): Response
+    public function show(Request $request, $adminToken, ClassService $classService, GroupRepository $groupRepository, TicketRepository $ticketRepository): Response
     {
         //créer un nouveau groupe
         $group = new Group();
@@ -57,12 +59,27 @@ class EventController extends AbstractController
             ]);
         }
         $formView = $form->createView();
-        //returns groups
+        //returns groups of this event
         $groups = $groupRepository->findBy([
             'event' => $event->getId(), 
-        ]/*, ['last_helped' => 'ASC']*/);
+        ], ['last_helped' => 'ASC']);
+
+        // $tickets = [];
+        // foreach ($groups as $g){
+        //     $ticketsForThisGroup = $ticketRepository->findBy(['group_ticket_id' => $g->getId()]);
+        //     array_push($tickets, $ticketsForThisGroup);
+        // }
+      
+        //returns ticket for this event
+        // $tickets = $ticketRepository->createQueryBuilder('u')
+        // ->select('count(u.id)')
+        // ->getQuery()
+        // ->getSingleScalarResult();
+        
+
         
         return $this->render('navigation/eventpage.html.twig', [
+            'adminToken' => $adminToken,
             'formView' => $formView, 
             'groups' => $groups,
             'event' => $event
