@@ -72,16 +72,15 @@
                 {% for group in groups %}
                     <tr>
                         <td>{{ group.name }}</td>
-                        <td><span class="badge bg-success">{{ group.linkToken }}</span></td>
+                        <td><span class="bg-primary p-1 text-white rounded">{{ group.linkToken }}</span></td>
                         <td>{{ group.lastArchived|date("d/m/Y") }} </td>
                         {% if group.lastHelped is null %}
                             <td>Aucune aide reçue </td>
-                            
                         {% else %}
                             <td>{{ group.lastHelped|date("d/m - H:i") }} </td>
 
                         {% endif %}
-                           
+                        
                         <td><a href="{{ path('group_delete', {id: group.id}) }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
                         <td><a href="{{ path('group_show', {linkTokenParam: group.linkToken}) }}" class="btn btn-success">Page du groupe</a></td>
                         <td><button class="btn btn-success">Tickets</button></td>
