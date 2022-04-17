@@ -20,3 +20,8 @@
 | créer une entité     | `php bin/console make:entity Ticket `        |
 | lancer les fixtures  | `php bin/console doctrine:fixtures:load`     |
 | créer une entité     | `php bin/console make:entity Ticket `        |
+
+## Explications
+
+- Quand nous créons un événement, un token est automatiquement généré. Celui-ci est compliqué et à destination du coach.
+- Quand un group est crée, on genère un autre token à destination du groupe, afin que ceux-ci puissent accéder à la page de leur groupe, créer des tickets.
