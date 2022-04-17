@@ -34,10 +34,16 @@ class GroupController extends AbstractController
     #[Route('/group/delete/{id}', name: 'group_delete')]
     public function delete($id): Response
     {
+        /**
+         * @var Group $group
+         */
         $group = $this->groupRepository->find($id);
+        /**
+         * @var String $adminToken
+         */
         $adminToken = $group->getEvent()->getAdminLinkToken();
 
-        if(!$group) {
+        if(null === $group) {
             throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
         }
 
