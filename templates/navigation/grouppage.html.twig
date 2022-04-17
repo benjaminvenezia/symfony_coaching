@@ -36,9 +36,7 @@
 
                 {% else %}
                     {% for ticket in tickets %}
-                        {% for item in ticket %}
                             {% include "shared/_ticketgroup.html.twig" %}     
-                        {% endfor %}
                     {% endfor %}
                 {% endif %}
                 
