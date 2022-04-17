@@ -16,17 +16,22 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class TicketController extends AbstractController
 {
     #[Route('/{adminLinkToken}/tickets/show', name: 'tickets_show')]
-    public function show($adminLinkToken, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository): Response
+    public function show(string $adminLinkToken, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository): Response
     {
         //find event 
         $event = $eventRepository->findOneBy([
             'adminLinkToken' => $adminLinkToken
         ]);
+        
         //find groups by event
         $groups = $groupRepository->findBy([
             'event' => $event->getId(), 
         ], ['last_helped' => 'ASC']);
-        //grasp tickets
+        
+
+        /**
+         * @var Ticket[] $tickets
+         */
         $tickets = [];
 
         foreach ($groups as $g){
@@ -42,7 +47,7 @@ class TicketController extends AbstractController
     }
 
     #[Route('/{linkToken}/ticket/{ticketId}/delete', name: 'ticket_delete')]
-    public function delete($linkToken, $ticketId,EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository): Response
+    public function delete(string $linkToken, $ticketId,EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository): Response
     {
         //find ticket 
         $ticket = $ticketRepository->find($ticketId);

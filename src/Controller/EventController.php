@@ -19,22 +19,30 @@ use App\Services\ClassService;
 class EventController extends AbstractController
 {
     #[Route('/event/{adminToken}/groups', name: 'event_show')]
-    public function show(Request $request, $adminToken, ClassService $classService, GroupRepository $groupRepository, EventRepository $eventRepository, EntityManagerInterface $em): Response
+    public function show(Request $request, string $adminToken, ClassService $classService, GroupRepository $groupRepository, EventRepository $eventRepository, EntityManagerInterface $em): Response
     {
-        //créer un nouveau groupe
+        /**
+         * @var Group $group 
+         */
         $group = new Group();
     
         $form = $this->createForm(CreateGroupType::class, $group);
     
         $form->handleRequest($request);
 
-         //return event
+         /**
+          * @var Event $event
+          */
          $event = $eventRepository->findOneBy([
             'adminLinkToken' => $adminToken
         ]);
 
         if($form->isSubmitted() && $form->isValid()) {
             //on genère un nouveau token qu'on associe au groupe
+
+            /**
+             * @var String $groupToken random key associated to event.
+             */
             $grouptoken = $classService->generateToken();
             $group->setLinkToken($grouptoken);
             $group->setLastArchived(new DateTime());
@@ -48,6 +56,7 @@ class EventController extends AbstractController
             ]);
         }
         $formView = $form->createView();
+        
         //returns groups of this event
         $groups = $groupRepository->findBy([
             'event' => $event->getId(), 

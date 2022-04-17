@@ -53,8 +53,8 @@ class GroupController extends AbstractController
         return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
 
-    #[Route('/group/help/{id}', name: 'group_help')]
-    public function help($id ,GroupRepository $groupRepository, EntityManagerInterface $em): Response
+    #[Route('/group/help/{id}', name: 'group_help', requirements: ['id' => '\d+'])]
+    public function help(int $id ,GroupRepository $groupRepository, EntityManagerInterface $em): Response
     {
         $group = $groupRepository->find($id);
         $adminToken = $group->getEvent()->getAdminLinkToken();
@@ -72,10 +72,8 @@ class GroupController extends AbstractController
     }
 
     #[Route('/group/{linkTokenParam}', name: 'group_show')]
-    public function show($linkTokenParam, GroupRepository $groupRepository, TicketRepository $ticketRepository, EntityManagerInterface $em, Request $request): Response
+    public function show(string $linkTokenParam, GroupRepository $groupRepository, TicketRepository $ticketRepository, EntityManagerInterface $em, Request $request): Response
     {
-        //remove special chars breaking the search
-        $linkTokenParam = preg_replace('/(\v|\s)+/', ' ', $linkTokenParam);
         $group = $groupRepository->findOneBy(['linkToken' => $linkTokenParam]);
 
         if(!$group) {

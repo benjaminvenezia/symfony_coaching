@@ -3,13 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\Group;
 use App\Form\CreateEventType;
-use App\Form\CreateGroupType;
 use App\Form\TokenLoginType;
 use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,16 +16,14 @@ use App\Services\ClassService;
 
 class NavigationController extends AbstractController
 {
-    //page A
     #[Route('/', name: 'homepage')]
-    public function homepage(EntityManagerInterface $em,Request $request, EventRepository $eventRepository, ClassService $classService): Response
+    public function homepage(EntityManagerInterface $em, Request $request, EventRepository $eventRepository, ClassService $classService): Response
     {
         $event = new Event();
         $formCreateEvent = $this->createForm(CreateEventType::class, $event);
         $formCreateEvent->handleRequest($request);
        
          if($formCreateEvent->isSubmitted() && $formCreateEvent->isValid()) {
-            //on genère un token.
             $generatedToken = $classService->generateToken();
             $event->setAdminLinkToken($generatedToken);
 
@@ -42,7 +37,6 @@ class NavigationController extends AbstractController
             ]);
         } 
         
-
         $formView = $formCreateEvent->createView();
 
         $events = $eventRepository->findAll();
@@ -84,7 +78,7 @@ class NavigationController extends AbstractController
     }
 
     #[Route('/loginuser', name: 'navigation_loginuser')]
-    public function loginUser(Request $request, GroupRepository $groupRepository, EventRepository $eventRepository): Response
+    public function loginUser(Request $request): Response
     {
         $formLogin = $this->createForm(TokenLoginType::class);
 
@@ -106,9 +100,4 @@ class NavigationController extends AbstractController
         ]);
 
     }
-
-    //page B
-    
-
-
 }
