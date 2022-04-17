@@ -32,7 +32,8 @@ class TicketController extends AbstractController
 
         return $this->render('navigation/eventtickets.html.twig', [
             'tickets' => $tickets,
-            'event' => $event
+            'event' => $event,
+            'adminToken' => $adminLinkToken
         ]);
     }
 }
