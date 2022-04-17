@@ -80,7 +80,6 @@ class NavigationController extends AbstractController
         return $this->render('navigation/logincoach.html.twig', [
             'formViewLogin' => $formViewLogin,
         ]);
-
     }
 
     //page B

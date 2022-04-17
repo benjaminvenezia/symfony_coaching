@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use DateTime;
 use App\Entity\Group;
 use App\Form\CreateGroupType;
@@ -12,23 +13,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Services\ClassService;
 
 class EventController extends AbstractController
 {
 
     protected $em;
-    protected $groupRepository;
     protected $eventRepository;
 
-    public function __construct(EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository)
+    public function __construct(EntityManagerInterface $em, EventRepository $eventRepository)
     {
         $this->em = $em;
-        $this->groupRepository = $groupRepository;
         $this->eventRepository = $eventRepository;
     }
 
     #[Route('/event/{adminToken}/groups', name: 'event_show')]
-    public function show(Request $request, $adminToken): Response
+    public function show(Request $request, $adminToken, ClassService $classService, GroupRepository $groupRepository): Response
     {
         //créer un nouveau groupe
         $group = new Group();
@@ -37,29 +37,30 @@ class EventController extends AbstractController
     
         $form->handleRequest($request);
 
+         //return event
+         $event = $this->eventRepository->findOneBy([
+            'adminLinkToken' => $adminToken
+        ]);
+
         if($form->isSubmitted() && $form->isValid()) {
-            //on set le token de l'événement au groupe
-            $group->setLinkToken($adminToken);
+            //on genère un nouveau token qu'on associe au groupe
+            $grouptoken = $classService->generateToken();
+            $group->setLinkToken($grouptoken);
             $group->setLastArchived(new DateTime());
+            $group->setEvent($event);
 
             $this->em->persist($group);
-
             $this->em->flush();
 
             return $this->redirectToRoute('event_show', [
                 "adminToken" => $adminToken,
             ]);
         }
-
         $formView = $form->createView();
-        //return event
-        $event = $this->eventRepository->findOneBy([
-            'adminLinkToken' => $adminToken
-        ]);
         //returns groups
-        $groups = $this->groupRepository->findBy([
-            'linkToken' => $adminToken, //link token is the same than adminToken in this implementation... 
-        ], ['last_helped' => 'ASC']);
+        $groups = $groupRepository->findBy([
+            'event' => $event->getId(), 
+        ]/*, ['last_helped' => 'ASC']*/);
         
         return $this->render('navigation/eventpage.html.twig', [
             'formView' => $formView, 

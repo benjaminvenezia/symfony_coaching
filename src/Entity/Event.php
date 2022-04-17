@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
@@ -21,6 +23,14 @@ class Event
 
     #[ORM\Column(type: 'string', length: 255)]
     private $email;
+
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Group::class)]
+    private $group_id;
+
+    public function __construct()
+    {
+        $this->group_id = new ArrayCollection();
+    }
 
     // #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'link_token')]
     // private $group_event;
@@ -77,4 +87,34 @@ class Event
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroupId(): Collection
+    {
+        return $this->group_id;
+    }
+
+    public function addGroupId(Group $groupId): self
+    {
+        if (!$this->group_id->contains($groupId)) {
+            $this->group_id[] = $groupId;
+            $groupId->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupId(Group $groupId): self
+    {
+        if ($this->group_id->removeElement($groupId)) {
+            // set the owning side to null (unless already changed)
+            if ($groupId->getEvent() === $this) {
+                $groupId->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
 }

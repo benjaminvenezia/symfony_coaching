@@ -42,6 +42,9 @@ class Group
     #[ORM\OneToMany(mappedBy: 'group_ticket_id', targetEntity: Ticket::class)]
     private $group_id;
 
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'group_id')]
+    private $event;
+
     public function __construct()
     {
         $this->link_token = new ArrayCollection();
@@ -200,6 +203,18 @@ class Group
                 $groupId->setGroupTicketId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): self
+    {
+        $this->event = $event;
 
         return $this;
     }
