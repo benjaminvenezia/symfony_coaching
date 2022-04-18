@@ -54,7 +54,6 @@ class Ticket
     {
         $this->createdAt = new DateTimeImmutable('now');
         $this->updatedAt = new DateTime('now');
-        $this->status = new Status();
     }
 
     public function getId(): ?int

@@ -6,9 +6,11 @@
 		</div>
 		<div class="card-body">
             <p class="card-text">{{item.request}}</p>
-            
+            <pre>
+                {{ dump(item) }}
+            </pre>
             <div class="flex">
-                <a href="{{ path('ticket_changestatus', {ticketId: item.id, linkToken: event.adminLinkToken, idStatus: 6}) }}" class="btn btn-sm btn-outline-info btn-sm">Réglé!</a>
+                <a href="{{ path('ticket_changestatus', {ticketId: item.id }) }}" class="btn btn-sm btn-outline-info btn-sm">Réglé!</a>
                 <a class="btn btn-sm btn-outline-secondary btn-sm">Répondre</a>
             </div>
 		</div>

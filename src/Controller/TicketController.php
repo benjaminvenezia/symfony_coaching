@@ -61,12 +61,16 @@ class TicketController extends AbstractController
 
     }
 
-    #[Route('/{linkToken}/ticket/{ticketId}/changestatus/${idStatus}', name: 'ticket_changestatus')]
-    public function changeStatus(string $linkToken, $ticketId,EntityManagerInterface $em, TicketRepository $ticketRepository, StatusRepository $statusRepository): Response
+    #[Route('/ticket/{ticketId}/changestatus', name: 'ticket_changestatus')]
+    public function changeStatus( $ticketId,EntityManagerInterface $em,EventRepository $eventRepository, GroupRepository $groupRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository): Response
     {
-        //find ticket 
         $ticket = $ticketRepository->find($ticketId);
-
+        $groupId = $ticket->getGroupTicketId();
+        $group = $groupRepository->findOneBy(['id' => $groupId]);
+        $eventId = $group->getEvent();
+        $event = $eventRepository->findOneBy(['id' => $eventId]);
+        $adminLinkToken = $event->getAdminLinkToken();
+        // dd($adminToken);
         if(!$ticket){
             throw new NotFoundHttpException("Pas de ticket avec l'identifant " . $ticketId);
         }
@@ -77,23 +81,17 @@ class TicketController extends AbstractController
             throw new NotFoundHttpException("Pas de status avec l'identifant ");
         }
 
-
-
         $status->setIsArchived(!$status->getIsArchived());
        
         // $status = ->getTicketStatus();
-        dd($status);
+        // dd($status);
         //permet de retrouver le ticket lié au status.
         // dd($status[0]->getTicketStatus());
 
-        if(!$ticket) {
-            throw new NotFoundHttpException("Le ticket que vous souhaitez supprimer n'existe pas.");
-        }
-
-        $em->remove($ticket);
+        $em->persist($status);
         $em->flush();
 
-        return $this->redirectToRoute('group_show', ['linkTokenParam' => $linkToken]);
+        return $this->redirectToRoute('tickets_show', ['adminLinkToken' => $adminLinkToken]);
 
     }
 }
