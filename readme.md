@@ -27,3 +27,7 @@
 - Quand un group est crée, on genère un autre token à destination du groupe, afin que ceux-ci puissent accéder à la page de leur groupe, créer des tickets.
 
 `vendor/bin/phpstan analyse -l 6 src`
+
+1. composer install
+2. symfony php bin/console doctrine:database:create
+3. php bin/console doctrine:migrations:migrate
