@@ -19,7 +19,7 @@ class Status
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    #[ORM\OneToOne(targetEntity: Ticket::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Ticket::class, cascade: ['remove'])]
     private $ticket_status;
 
     public function getId(): ?int

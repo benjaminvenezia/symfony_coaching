@@ -48,7 +48,6 @@ class Ticket
 
     // #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tickets')]
     // private $linkToken;
-    private $status;
 
     public function __construct()
     {

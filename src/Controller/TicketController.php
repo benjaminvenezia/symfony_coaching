@@ -45,15 +45,18 @@ class TicketController extends AbstractController
     }
 
     #[Route('/{linkToken}/ticket/{ticketId}/delete', name: 'ticket_delete')]
-    public function delete(string $linkToken, $ticketId,EntityManagerInterface $em, TicketRepository $ticketRepository): Response
+    public function delete(string $linkToken, $ticketId,EntityManagerInterface $em, TicketRepository $ticketRepository, StatusRepository $statusRepository): Response
     {
-        //find ticket 
         $ticket = $ticketRepository->find($ticketId);
 
         if(!$ticket) {
             throw new NotFoundHttpException("Le ticket que vous souhaitez supprimer n'existe pas.");
         }
+        
+        //find status binded to ticket and delete it before delete ticket.
+        $status = $statusRepository->findOneBy(['ticket_status' => $ticket->getId()]);
 
+        $em->remove($status);
         $em->remove($ticket);
         $em->flush();
 

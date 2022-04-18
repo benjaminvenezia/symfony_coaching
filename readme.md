@@ -31,3 +31,4 @@
 1. composer install
 2. symfony php bin/console doctrine:database:create
 3. php bin/console doctrine:migrations:migrate
+4. symfony serve
