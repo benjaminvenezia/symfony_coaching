@@ -3,9 +3,9 @@
 	<div class="card mb-1">
         <div class="card-header">
 			{% if ticket.isArchived == 1 %}
-				<span class="badge bg-success">On a répondu à votre appel.</span>
+				<span class="badge bg-success mb-4">On a répondu à votre appel.</span>
 			{% else %}
-				<span class="badge bg-dark">Ticket non traité.</span>
+				<span class="badge bg-dark mb-4">Ticket non traité par le coach.</span>
 			{% endif %}
 
 			<h3 class="card-text h5">{{ticket.title}}</h3>
