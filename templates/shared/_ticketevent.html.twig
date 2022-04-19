@@ -11,13 +11,16 @@
 			<h3 class="card-text h5">{{item.title}}</h3>
 			<p class="card-text">{{item.createdAt|date("d/m/Y")}}</p>
 		</div>
-        <pre>
-            {{ dump(item) }}
-        </pre>
+
 		<div class="card-body">
             <p class="card-text">{{item.request}}</p>
             <div class="flex">
+
+            {% if item.isArchived == 1 %}
+               <a href="{{ path('ticket_changestatus', {ticketId: item.id }) }}" class="btn btn-sm btn-outline-warning btn-sm">Non réglé!</a>
+             {% else %}
                 <a href="{{ path('ticket_changestatus', {ticketId: item.id }) }}" class="btn btn-sm btn-outline-info btn-sm">Réglé!</a>
+            {% endif %}
                 <a class="btn btn-sm btn-outline-secondary btn-sm">Répondre</a>
             </div>
 		</div>
