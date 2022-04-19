@@ -38,6 +38,9 @@
                     {% for ticket in tickets %}
                             {% include "shared/_ticketgroup.html.twig" %}     
                     {% endfor %}
+                     <div class="navigation">
+                      {{ knp_pagination_render(tickets) }}
+                     </div>
                 {% endif %}
                 
                 </div>

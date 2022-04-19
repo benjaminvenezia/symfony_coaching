@@ -12,6 +12,7 @@ use App\Repository\GroupRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,7 +82,7 @@ class GroupController extends AbstractController
 
     //Difficulté en Symfony : Ici je crée un ticket et on status associé. J'auras aimé avoir ça sous 'ticket_create', comment faire?
     #[Route('/group/{linkTokenParam}', name: 'group_show')]
-    public function show(string $linkTokenParam, GroupRepository $groupRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository, EntityManagerInterface $em, Request $request): Response
+    public function show(string $linkTokenParam, GroupRepository $groupRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository, EntityManagerInterface $em, Request $request, PaginatorInterface $paginator): Response
     {
         $group = $groupRepository->findOneBy(['linkToken' => $linkTokenParam]);
 
@@ -90,6 +91,12 @@ class GroupController extends AbstractController
         }
 
         $ticketsGroup = $ticketRepository->findBY(['group_ticket_id' => $group->getId()]);
+
+        $ticketsGroup = $paginator->paginate(
+            $ticketsGroup,
+            $request->query->getInt('page', 1),
+            2
+        );
 
         if($linkTokenParam !== $group->getLinkToken()){
             throw $this->createNotFoundException("Le groupe n'existe pas.");
@@ -118,10 +125,11 @@ class GroupController extends AbstractController
         }
         //on s'assure à chaque re-rendu que l'attribut isArchived est bien mis à jour.
         $allTickets = $ticketRepository->findAll();
+
         foreach($allTickets as $ticket){
             $status = $statusRepository->findOneBy(['ticket_status' => $ticket->getId()]);
             $ticket->setIsArchived($status->getIsArchived());
-        }    
+        }
 
         $form = $formTicket->createView();
 
