@@ -7,7 +7,7 @@
 	<div class="container mt-5 blur shadow-lg p-5">
 		<div class="row ">
 			<div class="col ">
-				<h1 class="mb-5">Modification d'un ticket</h1>
+				<h1 class="mb-5">Modification du ticket</h1>
 
 				{{ form_start(formView) }}
                     <div class="col-8">
@@ -22,7 +22,11 @@
                         {{ form_help(formView.request) }}
                         {{ form_errors(formView.request) }}
                     </div>
-                <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-save"></i>Modifier le ticket.</button>
+                <div class="mt-3">
+                    <a href="{{path('group_show', {linkTokenParam})}}" class="btn btn-dark">< Retour à votre groupe.</a>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>Modifier le ticket.</button>
+                </div>
+
 				{{ form_end(formView) }}
 			</div>
         </div>

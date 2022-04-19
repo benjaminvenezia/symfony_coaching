@@ -83,7 +83,7 @@ class TicketController extends AbstractController
         $ticket = $ticketRepository->find($ticketId);
 
         if(!$ticket) {
-            throw new NotFoundHttpException("Le ticket que vous souhaitez supprimer n'existe pas.");
+            throw new NotFoundHttpException("Le ticket que vous souhaitez modifié n'existe pas.");
         }
 
         $form = $this->createForm(TicketType::class, $ticket);
@@ -102,6 +102,7 @@ class TicketController extends AbstractController
         
         return $this->render('navigation/ticketupdate.html.twig', [
             'formView' => $formView,
+            'linkTokenParam' => $linkToken,
         ]);
     }
 
