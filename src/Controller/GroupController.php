@@ -9,6 +9,7 @@ use App\Entity\Ticket;
 use App\Form\TicketType;
 use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
+use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,8 +73,9 @@ class GroupController extends AbstractController
         return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
 
+    //Difficulté en Symfony : Ici je crée un ticket et on status associé. J'auras aimé avoir ça sous 'ticket_create', comment faire?
     #[Route('/group/{linkTokenParam}', name: 'group_show')]
-    public function show(string $linkTokenParam, GroupRepository $groupRepository, TicketRepository $ticketRepository, EntityManagerInterface $em, Request $request): Response
+    public function show(string $linkTokenParam, GroupRepository $groupRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository, EntityManagerInterface $em, Request $request): Response
     {
         $group = $groupRepository->findOneBy(['linkToken' => $linkTokenParam]);
 
@@ -95,6 +97,7 @@ class GroupController extends AbstractController
         $status->setTicketStatus($ticket);
 
         $ticket->setGroupTicketId($group);
+
         $formTicket= $this->createForm(TicketType::class, $ticket);
         $formTicket->handleRequest($request);
         
@@ -107,6 +110,12 @@ class GroupController extends AbstractController
                 "linkTokenParam" => $linkTokenParam
             ]);            
         }
+        //on s'assure à chaque re-rendu que l'attribut isArchived est bien mis à jour.
+        $allTickets = $ticketRepository->findAll();
+        foreach($allTickets as $ticket){
+            $status = $statusRepository->findOneBy(['ticket_status' => $ticket->getId()]);
+            $ticket->setIsArchived($status->getIsArchived());
+        }    
 
         $form = $formTicket->createView();
 
