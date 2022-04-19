@@ -12,6 +12,7 @@ use App\Repository\GroupRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,24 +35,29 @@ class GroupController extends AbstractController
 
     
     #[Route('/group/delete/{id}', name: 'group_delete')]
-    public function delete($id, GroupRepository $groupRepository, EntityManagerInterface $em): Response
+    public function delete($id, GroupRepository $groupRepository, TicketRepository $ticketRepository, EntityManagerInterface $em): Response
     {
         /**
          * @var Group $group
          */
         $group = $groupRepository->find($id);
+
         /**
          * @var String $adminToken
          */
         $adminToken = $group->getEvent()->getAdminLinkToken();
 
         if(null === $group) {
-            throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
+          throw $this->createNotFoundException("Le groupe n'existe pas et ne peut pas être supprimé");
         }
-
+        
+        if($ticketRepository->findBy(['group_ticket_id' => $group->getId()]) != null) {
+            throw new Exception("Le groupe possède des tickets.");
+        }
+      
         $em->remove($group);
         $em->flush();
-
+       
         return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
 
