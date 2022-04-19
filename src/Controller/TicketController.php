@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class TicketController extends AbstractController
 {
     #[Route('/{adminLinkToken}/tickets/show', name: 'tickets_show')]
-    public function show(string $adminLinkToken, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository): Response
+    public function show(string $adminLinkToken, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository): Response
     {
         //find event 
         $event = $eventRepository->findOneBy([
@@ -26,6 +26,9 @@ class TicketController extends AbstractController
         $groups = $groupRepository->findBy([
             'event' => $event->getId(), 
         ], ['last_helped' => 'ASC']);
+
+
+      
         
         /**
          * @var Ticket[] $tickets
@@ -34,9 +37,16 @@ class TicketController extends AbstractController
 
         foreach ($groups as $g){
             $ticketsForThisGroup = $ticketRepository->findBy(['group_ticket_id' => $g->getId()]);
+
+            //Pour chaque groupe de ticket, on lui associe son statut de la table Status.
+            foreach($ticketsForThisGroup as $ticket){
+                $status = $statusRepository->findOneBy(['ticket_status' => $ticket->getId()]);
+                $ticket->setIsArchived($status->getIsArchived());
+            }
+
             array_push($tickets, $ticketsForThisGroup);
         }
-
+        
         return $this->render('navigation/eventtickets.html.twig', [
             'tickets' => $tickets,
             'event' => $event,
@@ -52,7 +62,7 @@ class TicketController extends AbstractController
         if(!$ticket) {
             throw new NotFoundHttpException("Le ticket que vous souhaitez supprimer n'existe pas.");
         }
-        
+
         //find status binded to ticket and delete it before delete ticket.
         $status = $statusRepository->findOneBy(['ticket_status' => $ticket->getId()]);
 
@@ -86,11 +96,6 @@ class TicketController extends AbstractController
 
         $status->setIsArchived(!$status->getIsArchived());
        
-        // $status = ->getTicketStatus();
-        // dd($status);
-        //permet de retrouver le ticket lié au status.
-        // dd($status[0]->getTicketStatus());
-
         $em->persist($status);
         $em->flush();
 

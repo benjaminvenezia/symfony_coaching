@@ -46,6 +46,9 @@ class Ticket
     )]
     private $title;
 
+
+    private $isArchived;
+
     // #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tickets')]
     // private $linkToken;
 
@@ -53,6 +56,19 @@ class Ticket
     {
         $this->createdAt = new DateTimeImmutable('now');
         $this->updatedAt = new DateTime('now');
+        $this->isArchived = false;
+    }
+
+    public function getIsArchived(): ?string
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $state): self
+    {
+        $this->isArchived = $state;
+
+        return $this;
     }
 
     public function getId(): ?int
