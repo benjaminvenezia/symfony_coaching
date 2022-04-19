@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Status;
+use App\Entity\Ticket;
+use App\Form\TicketType;
 use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TicketController extends AbstractController
 {
+
+    
     #[Route('/{adminLinkToken}/tickets/show', name: 'tickets_show')]
     public function show(string $adminLinkToken, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository): Response
     {
@@ -27,9 +33,6 @@ class TicketController extends AbstractController
             'event' => $event->getId(), 
         ], ['last_helped' => 'ASC']);
 
-
-      
-        
         /**
          * @var Ticket[] $tickets
          */
@@ -74,6 +77,34 @@ class TicketController extends AbstractController
 
     }
 
+    #[Route('/{linkToken}/ticket/{ticketId}/update', name: 'ticket_update')]
+    public function update(string $linkToken, $ticketId, Request $request, EntityManagerInterface $em, TicketRepository $ticketRepository, StatusRepository $statusRepository): Response
+    {
+        $ticket = $ticketRepository->find($ticketId);
+
+        if(!$ticket) {
+            throw new NotFoundHttpException("Le ticket que vous souhaitez supprimer n'existe pas.");
+        }
+
+        $form = $this->createForm(TicketType::class, $ticket);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+                   
+            $em->flush();
+
+            // $this->addFlash('info', "L'article a été modifié avec succès.");
+            return $this->redirectToRoute('group_show', ['linkTokenParam' => $linkToken]);
+        }
+
+        $formView = $form->createView();
+        
+        return $this->render('navigation/ticketupdate.html.twig', [
+            'formView' => $formView,
+        ]);
+    }
+
     #[Route('/ticket/{ticketId}/changestatus', name: 'ticket_changestatus')]
     public function changeStatus( $ticketId,EntityManagerInterface $em,EventRepository $eventRepository, GroupRepository $groupRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository): Response
     {
@@ -89,10 +120,6 @@ class TicketController extends AbstractController
         }
 
         $status = $statusRepository->findOneBy(['ticket_status' => $ticket->getId()]);
-
-        if(!$status){
-            throw new NotFoundHttpException("Pas de status avec l'identifant ");
-        }
 
         $status->setIsArchived(!$status->getIsArchived());
        

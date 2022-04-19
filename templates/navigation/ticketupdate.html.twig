@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification d'un ticket
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5 blur shadow-lg p-5">
+		<div class="row ">
+			<div class="col ">
+				<h1 class="mb-5">Modification d'un ticket</h1>
+
+				{{ form_start(formView) }}
+                    <div class="col-8">
+                        {{ form_label(formView.title) }}
+                        {{ form_widget(formView.title) }}
+                        {{ form_help(formView.title) }}
+                        {{ form_errors(formView.title) }}
+                    </div>
+                    <div class="col-8 mt-2">
+                        {{ form_label(formView.request) }}
+                        {{ form_widget(formView.request) }}
+                        {{ form_help(formView.request) }}
+                        {{ form_errors(formView.request) }}
+                    </div>
+                <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-save"></i>Modifier le ticket.</button>
+				{{ form_end(formView) }}
+			</div>
+        </div>
+	</div>
+{% endblock %}
