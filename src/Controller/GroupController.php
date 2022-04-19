@@ -21,22 +21,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GroupController extends AbstractController
 {
-    // protected $em;
-    // protected $groupRepository;
-    // protected $eventRepository;
-    // protected $ticketRepository;
-
-    // public function __construct(EntityManagerInterface $em, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository)
-    // {
-    //     $this->em = $em;
-    //     $this->groupRepository = $groupRepository;
-    //     $this->eventRepository = $eventRepository;
-    //     $this->ticketRepository = $ticketRepository;
-    // }
-
     
     #[Route('/group/delete/{id}', name: 'group_delete')]
-    public function delete($id, GroupRepository $groupRepository, TicketRepository $ticketRepository, EntityManagerInterface $em): Response
+    public function delete(
+        $id, 
+        GroupRepository $groupRepository, 
+        TicketRepository $ticketRepository, 
+        EntityManagerInterface $em
+    ): Response
     {
         /**
          * @var Group $group
@@ -63,9 +55,20 @@ class GroupController extends AbstractController
     }
 
     #[Route('/group/help/{id}', name: 'group_help', requirements: ['id' => '\d+'])]
-    public function help(int $id ,GroupRepository $groupRepository, EntityManagerInterface $em): Response
+    public function help(
+        int $id,
+        GroupRepository $groupRepository, 
+        EntityManagerInterface $em 
+    ): Response
     {
+        /**
+         * @var Group $group
+         */
         $group = $groupRepository->find($id);
+        
+        /**
+         * @var String $adminToken
+         */
         $adminToken = $group->getEvent()->getAdminLinkToken();
 
         if(!$group) {
@@ -80,17 +83,30 @@ class GroupController extends AbstractController
         return $this->redirectToRoute('event_show', ['adminToken' => $adminToken]);
     }
 
-    //Difficulté en Symfony : Ici je crée un ticket et on status associé. J'auras aimé avoir ça sous 'ticket_create', comment faire?
     #[Route('/group/{linkTokenParam}', name: 'group_show')]
-    public function show(string $linkTokenParam, GroupRepository $groupRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository, EntityManagerInterface $em, Request $request, PaginatorInterface $paginator): Response
+    public function show(
+        string $linkTokenParam, 
+        GroupRepository $groupRepository, 
+        TicketRepository $ticketRepository, 
+        StatusRepository $statusRepository, 
+        EntityManagerInterface $em, 
+        Request $request, 
+        PaginatorInterface $paginator
+    ): Response
     {
+        /**
+         * @var Group $group
+         */
         $group = $groupRepository->findOneBy(['linkToken' => $linkTokenParam]);
 
         if(!$group) {
             throw $this->createNotFoundException("Le groupe n'existe pas.");
         }
 
-        $ticketsGroup = $ticketRepository->findBY(['group_ticket_id' => $group->getId()]);
+        /**
+         * @var Ticket[] $ticketsGroup 
+         */
+        $ticketsGroup = $ticketRepository->findBy(['group_ticket_id' => $group->getId()]);
 
         $ticketsGroup = $paginator->paginate(
             $ticketsGroup,
@@ -101,8 +117,14 @@ class GroupController extends AbstractController
         if($linkTokenParam !== $group->getLinkToken()){
             throw $this->createNotFoundException("Le groupe n'existe pas.");
         }
-
+        /**
+         * @var Ticket $ticket
+         */
         $ticket = new Ticket();
+
+        /**
+         * @var Status $status
+         */
         $status = new Status();
 
         $status->setName('status de test');
@@ -119,11 +141,12 @@ class GroupController extends AbstractController
             $em->persist($status);
 
             $em->flush();
+
             return $this->redirectToRoute('group_show', [
                 "linkTokenParam" => $linkTokenParam
             ]);            
         }
-        //on s'assure à chaque re-rendu que l'attribut isArchived est bien mis à jour.
+        //on s'assure à chaque re-rendu que l'attribut isArchived est bien mis à jour pour absolument tous les tickets.
         $allTickets = $ticketRepository->findAll();
 
         foreach($allTickets as $ticket){

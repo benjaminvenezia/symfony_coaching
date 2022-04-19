@@ -15,12 +15,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Services\ClassService;
+use App\Services\EventService;
 use Knp\Component\Pager\PaginatorInterface;
 
 class EventController extends AbstractController
 {
     #[Route('/event/{adminToken}/groups', name: 'event_show')]
-    public function show(Request $request, string $adminToken, ClassService $classService, GroupRepository $groupRepository,TicketRepository $ticketRepository, EventRepository $eventRepository, EntityManagerInterface $em, PaginatorInterface $paginator): Response
+    public function show(Request $request, string $adminToken,EventService $eventService, ClassService $classService, GroupRepository $groupRepository,TicketRepository $ticketRepository, EventRepository $eventRepository, EntityManagerInterface $em, PaginatorInterface $paginator): Response
     {
         /**
          * @var Group $group 
@@ -34,9 +35,7 @@ class EventController extends AbstractController
          /**
           * @var Event $event
           */
-         $event = $eventRepository->findOneBy([
-            'adminLinkToken' => $adminToken
-        ]);
+         $event = $eventRepository->findOneBy(['adminLinkToken' => $adminToken]);
 
         if($form->isSubmitted() && $form->isValid()) {
             /**
@@ -62,25 +61,22 @@ class EventController extends AbstractController
             'event' => $event->getId(), 
         ], ['last_helped' => 'ASC']);
 
-
+        /**
+         * @var Group[] $groups The paginated groups
+         */
         $groups = $paginator->paginate(
             $groups,
             $request->query->getInt('page', 1),
-            2
+            4
         );
 
         /**
          * @var int $counterTicketsForThisEvent number of tickets for all the groups of the event.
          */
-        $counterTicketsForThisEvent = 0;
-
-        foreach ($groups as $g){
-            $n = count($ticketRepository->findBy(['group_ticket_id' => $g->getId()]));
-            $counterTicketsForThisEvent += $n;
-        }
+        $counterTicketsForThisEvent = $eventService->getNbTicketsForThisEvent($groups);
         
         return $this->render('navigation/eventpage.html.twig', [
-            'nbArticles' => $counterTicketsForThisEvent,
+            'nbTickets' => $counterTicketsForThisEvent,
             'adminToken' => $adminToken,
             'formView' => $formView, 
             'groups' => $groups,
