@@ -11,6 +11,7 @@ use App\Repository\EventRepository;
 use App\Repository\GroupRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TicketRepository;
+use App\Services\TicketService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Exception;
@@ -65,7 +66,7 @@ class GroupController extends AbstractController
          * @var Group $group
          */
         $group = $groupRepository->find($id);
-        
+
         /**
          * @var String $adminToken
          */
@@ -88,7 +89,7 @@ class GroupController extends AbstractController
         string $linkTokenParam, 
         GroupRepository $groupRepository, 
         TicketRepository $ticketRepository, 
-        StatusRepository $statusRepository, 
+        TicketService $ticketService,
         EntityManagerInterface $em, 
         Request $request, 
         PaginatorInterface $paginator
@@ -146,13 +147,8 @@ class GroupController extends AbstractController
                 "linkTokenParam" => $linkTokenParam
             ]);            
         }
-        //on s'assure à chaque re-rendu que l'attribut isArchived est bien mis à jour pour absolument tous les tickets.
-        $allTickets = $ticketRepository->findAll();
-
-        foreach($allTickets as $ticket){
-            $status = $statusRepository->findOneBy(['ticket_status' => $ticket->getId()]);
-            $ticket->setIsArchived($status->getIsArchived());
-        }
+        
+        $ticketService->updateAllIsArchivedTicketsStatus();
 
         $form = $formTicket->createView();
 

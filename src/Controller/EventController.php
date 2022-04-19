@@ -21,7 +21,16 @@ use Knp\Component\Pager\PaginatorInterface;
 class EventController extends AbstractController
 {
     #[Route('/event/{adminToken}/groups', name: 'event_show')]
-    public function show(Request $request, string $adminToken,EventService $eventService, ClassService $classService, GroupRepository $groupRepository,TicketRepository $ticketRepository, EventRepository $eventRepository, EntityManagerInterface $em, PaginatorInterface $paginator): Response
+    public function show(
+        string $adminToken,
+        Request $request, 
+        EventService $eventService, 
+        ClassService $classService, 
+        GroupRepository $groupRepository, 
+        EventRepository $eventRepository, 
+        EntityManagerInterface $em, 
+        PaginatorInterface $paginator
+        ): Response
     {
         /**
          * @var Group $group 

@@ -12,8 +12,16 @@ class EventService {
         $this->ticketRepository = $ticketRepository;
     }
 
+    /**
+     * Return number of ticket by Event.
+     * @param Group[] $groups All groups of the event.
+     * @return integer
+     */
     public function getNbTicketsForThisEvent($groups): int
     {
+        /**
+         * @var int $counter;
+         */
         $counter = 0;
 
         foreach ($groups as $g){
