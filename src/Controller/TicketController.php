@@ -15,13 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Knp\Component\Pager\PaginatorInterface;
 
 class TicketController extends AbstractController
 {
 
     
     #[Route('/{adminLinkToken}/tickets/show', name: 'tickets_show')]
-    public function show(string $adminLinkToken, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository): Response
+    public function show(string $adminLinkToken, Request $request, GroupRepository $groupRepository, EventRepository $eventRepository, TicketRepository $ticketRepository, StatusRepository $statusRepository, PaginatorInterface $paginator): Response
     {
         //find event 
         $event = $eventRepository->findOneBy([
@@ -49,7 +50,7 @@ class TicketController extends AbstractController
 
             array_push($tickets, $ticketsForThisGroup);
         }
-        
+
         return $this->render('navigation/eventtickets.html.twig', [
             'tickets' => $tickets,
             'event' => $event,

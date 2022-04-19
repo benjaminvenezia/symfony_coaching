@@ -88,6 +88,10 @@
                         <td><a href="{{ path('group_help', {id: group.id}) }}" class="btn btn-success">Aider</a></td>
                     </tr>
                 {% endfor %}
+                <div class="navigation">
+                    {{ knp_pagination_render(groups) }}
+                </div>
+                
              </tbody>
             </table>
             {% else %}

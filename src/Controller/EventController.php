@@ -15,11 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Services\ClassService;
+use Knp\Component\Pager\PaginatorInterface;
 
 class EventController extends AbstractController
 {
     #[Route('/event/{adminToken}/groups', name: 'event_show')]
-    public function show(Request $request, string $adminToken, ClassService $classService, GroupRepository $groupRepository,TicketRepository $ticketRepository, EventRepository $eventRepository, EntityManagerInterface $em): Response
+    public function show(Request $request, string $adminToken, ClassService $classService, GroupRepository $groupRepository,TicketRepository $ticketRepository, EventRepository $eventRepository, EntityManagerInterface $em, PaginatorInterface $paginator): Response
     {
         /**
          * @var Group $group 
@@ -60,6 +61,13 @@ class EventController extends AbstractController
         $groups = $groupRepository->findBy([
             'event' => $event->getId(), 
         ], ['last_helped' => 'ASC']);
+
+
+        $groups = $paginator->paginate(
+            $groups,
+            $request->query->getInt('page', 1),
+            2
+        );
 
         /**
          * @var int $counterTicketsForThisEvent number of tickets for all the groups of the event.
